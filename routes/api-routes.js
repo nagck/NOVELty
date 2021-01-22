@@ -12,12 +12,15 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// required for api request for tastedive
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
   });
   
-  app.get('/', (req, res) => {
+  
+
+  app.get('/api/test', (req, res) => {
     // let book = 'book:The Dead Zone'
     // const url = `https://tastedive.com/api/similar?q=${book}&k=${process.env.MYAPIKEY_TD}`;
     // request(
