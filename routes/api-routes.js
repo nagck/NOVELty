@@ -1,7 +1,7 @@
 // Requiring our models and passport as we've configured it
 var db = require("../models");
 var fetch = require('node-fetch');
-var passport = require("../config/passport");
+var passport = require("passport");
 const request = require('request');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
