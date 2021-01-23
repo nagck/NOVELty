@@ -339,7 +339,10 @@ module.exports = function(app) {
                 console.log(uniqueUsers);
                 db.Reading.findAll({
                     where:{
-                        UserID : uniqueUsers
+                        UserID : uniqueUsers,
+                        BookId : {
+                            [Op.ne] : allBooks
+                        }
                     },
                     include: [db.Book]
                 })
@@ -382,6 +385,20 @@ module.exports = function(app) {
                     })
                 }
             })
+        })
+    })
+
+    app.get('/api/recommendationNY/:genre',(req,res) =>{
+        recommendationNewYork(req.params.genre, data => {
+            if(!data) {
+                res.status(500);
+            }
+            else {
+                let isbnArray = data.results.map(result => {
+                    return result.isbns[0].isbn13;
+                })
+                res.json(isbnArray)
+            }
         })
     })
     
