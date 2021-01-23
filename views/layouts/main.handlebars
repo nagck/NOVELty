@@ -15,15 +15,15 @@
 <body>
   <header class="site-header">
     <div class="row"> 
+      {{!-- This part of the header will be static --}}
         <div class="site-header_logo">
             <a href="index.html" title="NOVELty Homepage">
             <img class="fixed-ratio-resize" src="./images/NOVELty.gif" alt="NOVELty logo"> 
             </a>
         </div>
-
-        <div class="header-block float-right col-8">
-            <span>Welcome Back! <a href="login.html" title="User Log In"><u>Log In</u></a> </span><br>
-            <span>New User? <a href="signup.html" title="New User Registration"><u>Register Here</u></a> </span>
+        <div class="header-block float-right col-8"></div>
+        {{!-- This will render a dynamic div depending on whether the user has logged in or not --}}
+        {{> header/header-block autheticated=false}}
         </div>
    </div>
 

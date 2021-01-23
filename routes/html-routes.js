@@ -3,11 +3,17 @@ var isAuthenticated = require("../config/middleware/isAuthenticated");
 module.exports = function(app) {
 // index page - login or singup
   app.get('/', (req,res)=>{
+    if (req.user) {
+      res.redirect("/home");
+    }
     res.render('index', {});
   });
 
   // login page
   app.get('/login', (req,res)=>{
+    if (req.user) {
+      res.redirect("/home");
+    }
     res.render('login', {});
   });
 
@@ -15,6 +21,11 @@ module.exports = function(app) {
   app.get('/signup', (req,res)=>{
     res.render('signup', {});
   });
+
+    // newuser page
+  app.get('/newuser', (req,res)=>{
+    res.render('newuser', {});
+    });
 
   app.get('/home',isAuthenticated, (req,res)=>{
     res.render('home', {});
