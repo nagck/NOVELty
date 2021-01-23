@@ -53,9 +53,9 @@ describe('search by ISBN', () => {
         let title = "The Pale King"
         let callback = (result) => {
             try { 
-                check_author = result.map(item => item.author.map(author => author.split(',').map(name => name.trim()).reverse().join(' '))).flat();
-                expect(check_author).toContain(author)
-                expect(result.title.toLowerCase()).toBe(expect.stringContaining(title))
+                let check_author = result.map(item => item.author.map(author => author.split(',').map(name => name.trim().toLowerCase()).reverse().join(' '))).flat();
+                expect(check_author).toContain(author.toLowerCase())
+                expect(result.title.toLowerCase()).toBe(expect.stringContaining(title.toLowerCase()))
                 done();
             }
             catch (error) {
