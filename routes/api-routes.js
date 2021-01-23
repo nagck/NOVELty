@@ -246,6 +246,7 @@ module.exports = function(app) {
             res.status(401).json({err})
         })
     })
+    
     // add a book
     app.post('/api/books/:user',(req,res) =>{
         db.Reading.findOrCreate({
@@ -336,12 +337,13 @@ module.exports = function(app) {
             .then(result =>{
                 let allUsers = result.map(item => item.UserId);
                 let uniqueUsers = [...new Set(allUsers)]
+                console.log(allBooks);
                 console.log(uniqueUsers);
                 db.Reading.findAll({
                     where:{
                         UserID : uniqueUsers,
                         BookId : {
-                            [Op.ne] : allBooks
+                            [Op.notIn] : allBooks
                         }
                     },
                     include: [db.Book]
