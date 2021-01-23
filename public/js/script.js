@@ -1,17 +1,25 @@
 
+<!-- const fetch = require("node-fetch"); //-->
+
+const test = (title,cb) => {
+    fetch("https://xkcd.com/614/info.0.json")
+    .then(data => data.json())
+    .then(console.log(data))
+}
+
 // Search function using the OpenLibrary API with the Book Title - must match   - used when user wants to add a book that they have already read 
-const searchByTitle = (title,cb) =>{
+const searchByTitle = (title,cb) => {
     // let title = "Life after life"; //to be change for user input
     let url = "http://openlibrary.org/search.json?title=";
 
     fetch(url+title)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         let bookList =[];
         let authorUnique = [];
-        data.docs.forEach(book =>{
-            console.log(book.author_name)
+        data.docs.forEach(book => {
+            // console.log(book.author_name)
             if(book.author_name !== undefined) {
                 if(book.title.toLowerCase() == title.toLowerCase()){
                     if(authorUnique.indexOf(book.author_key[0])==-1) {
@@ -23,10 +31,11 @@ const searchByTitle = (title,cb) =>{
                     authorUnique.push(book.author_key[0]);
                 } 
             }
-        })
-        console.log(bookList);
+        
+        // console.log(data);
         cb(bookList)
-    })
+        })
+    });
 }
 
 // Search function using the OpenLibrary API with author - used when user wants to add a book that they have already read 
@@ -77,5 +86,7 @@ const getBookInfo = (ISBN, cb) =>{
         cb(bookObj);
     })
 }
+
+<!-- module.exports = { searchByTitle, searchByAuthor, getBookInfo, test }//-->
 
 
