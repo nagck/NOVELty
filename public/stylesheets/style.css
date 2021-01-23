@@ -1,4 +1,44 @@
-form.signup,
+/* form.signup,
 form.login {
   margin-top: 50px;
+} */
+
+body {
+  background-color: #d45b5b;
 }
+
+.fixed-ratio-resize {
+  max-width: 65%;
+  height: auto;
+  width: auto\9;
+  opacity: 80%;
+}
+
+.jumbotron {
+  background-color: #d45b5b;
+}
+
+.index-image {
+  max-width: 100%;
+  height: auto;
+  width: auto\9;
+}
+
+.header-block {
+  padding-top: 3rem;
+  text-align: center;
+  font: bolder;
+  color: beige;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 35px;
+}
+
+.index-blurb {
+  padding-left: 3rem;
+  text-align: left;
+  font: bold;
+  color: beige;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+}
+
