@@ -11,16 +11,24 @@ const searchByTitle = (title,cb) =>{
         let bookList =[];
         let authorUnique = [];
         data.docs.forEach(book =>{
-            console.log(book.author_name)
             if(book.author_name !== undefined) {
-                if(book.title.toLowerCase() == title.toLowerCase()){
-                    if(authorUnique.indexOf(book.author_key[0])==-1) {
-                        bookList.push({
-                            author: book.author_name,
-                            title: book.title
-                        });
+                if(book.isbn !== undefined) {
+                    if(book.title.toLowerCase() == title.toLowerCase()){
+                        if(authorUnique.indexOf(book.author_key[0])==-1) {
+                            let isbn = book.isbn[0];
+                            for(let i = 0; i < book.isbn.length; i++){
+                                if(book.isbn[i].startsWith('9780')) {
+                                    isbn = book.isbn[i];
+                                }
+                            }
+                            bookList.push({
+                                author: book.author_name,
+                                title: book.title,
+                                isbn: isbn
+                            });
+                        }
+                        authorUnique.push(book.author_key[0]);
                     }
-                    authorUnique.push(book.author_key[0]);
                 } 
             }
         })
@@ -41,15 +49,25 @@ const searchByAuthor = (author, cb) => {
         let bookList =[];
         let titleUnique = [];
         data.docs.forEach(book =>{
-            console.log(book.author_name)
             if(book.author_name !== undefined) {
-                if(titleUnique.indexOf(book.title)==-1) {
-                    bookList.push({
-                        author: book.author_name,
-                        title: book.title
-                    });
-                }
-                titleUnique.push(book.title);
+                if(book.isbn !== undefined) {
+                    if(book.title.toLowerCase() == title.toLowerCase()){
+                        if(titleUnique.indexOf(book.title)==-1) {
+                            let isbn = book.isbn[0];
+                            for(let i = 0; i < book.isbn.length; i++){
+                                if(book.isbn[i].startsWith('9780')) {
+                                    isbn = book.isbn[i];
+                                }
+                            }
+                            bookList.push({
+                                author: book.author_name,
+                                title: book.title,
+                                isbn: isbn
+                            });
+                        }
+                        titleUnique.push(book.title);
+                    }
+                } 
             }
         })
         console.log(bookList);
