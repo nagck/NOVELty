@@ -34,7 +34,9 @@ module.exports = (sequelize, DataTypes) => {
     // Books.associate = (models) => {
     //   // Associating Books with Review
     //   // When a Book is deleted, also delete any associated Review
-    //   models.Books.hasMany(models.Review, models.Reading, {
+
+    //   models.Books.hasMany(models.Reviews, models.Readings, {
+
     //     onDelete: 'cascade',
     //     //foreignKey: 'userID'
     //   });
