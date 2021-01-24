@@ -227,7 +227,7 @@ module.exports = function(app) {
     app.post('/api/book/user',(req,res) =>{
         db.Readings.findOrCreate({
             where: {
-                UserId:  req.params.user,
+                UserId:  req.user.id,
                 BookId:  req.body.id
             },
             defaults:{
@@ -304,42 +304,49 @@ module.exports = function(app) {
             include: [db.Books]
         }).then(results => {
             let allFavouriteBooks = results.map(book => book.BookId)
-            // console.log(allBooks)
-            db.Readings.findAll({
-                where:{
-                    BookId : allFavouriteBooks,
-                    favourite : 1,
-                    UserID : {
-                        [Op.ne] : req.params.user 
-                    }
-                }
-            })
-            .then(results =>{
-                let allUsers = results.map(item => item.UserId);
-                let uniqueUsers = [...new Set(allUsers)]
+            console.log('user recommendation')
+            console.log(allFavouriteBooks)
+            if(allFavouriteBooks.length != 0){
                 db.Readings.findAll({
                     where:{
-                        UserID : req.params.user
+                        BookId : allFavouriteBooks,
+                        favourite : 1,
+                        UserID : {
+                            [Op.ne] : req.user.id 
+                        }
                     }
                 })
-                .then(results => {
-                    let allBooks = results.map(book => book.BookId);
+                .then(results =>{
+                    let allUsers = results.map(item => item.UserId);
+                    let uniqueUsers = [...new Set(allUsers)]
                     db.Readings.findAll({
                         where:{
-                            UserID : uniqueUsers,
-                            BookId : {
-                                [Op.notIn] : allBooks
-                            }
-                        },
-                        include: [db.Books]
+                            UserID : req.user.id
+                        }
                     })
                     .then(results => {
-                        let Books = results.map(book => book.Book.isbn)
-                        res.json(Books)
+                        let allBooks = results.map(book => book.BookId);
+                        db.Readings.findAll({
+                            where:{
+                                UserID : uniqueUsers,
+                                BookId : {
+                                    [Op.notIn] : allBooks
+                                }
+                            },
+                            include: [db.Books]
+                        })
+                        .then(results => {
+                            let Books = results.map(book => book.Book.isbn)
+                            res.json(Books)
+                        })
                     })
+                    
                 })
-                
-            })
+            }
+            else {
+                res.json([])
+            }
+            
         })
     })
 
@@ -358,20 +365,25 @@ module.exports = function(app) {
             include: [db.Books]
         }).then(books => {
             let allBooks = books.map(book => book.Book.title)
-            shuffle(allBooks);
-            recommendationTasteDiveArray(allBooks, data => {
-                if(!data) {
-                    res.status(500);
-                }
-                else {
-                    let isbnArray = [];
-                    let titles = data.Similar.Results.map(element => element.Name)
-                    console.log(titles)
-                    findISNB(titles, isbnArray, data =>{
-                        res.json(data)
-                    })
-                }
-            })
+            if(allBooks.length != 0){
+                shuffle(allBooks);
+                recommendationTasteDiveArray(allBooks, data => {
+                    if(!data) {
+                        res.status(500);
+                    }
+                    else {
+                        let isbnArray = [];
+                        let titles = data.Similar.Results.map(element => element.Name)
+                        console.log(titles)
+                        findISNB(titles, isbnArray, data =>{
+                            res.json(data)
+                        })
+                    }
+                })
+            }
+            else {
+                res.json([])
+            }
         })
     })
 
