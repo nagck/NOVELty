@@ -109,6 +109,7 @@ const shuffle =  (array) => {
   }
 
 const getRecommendation = (cb) =>{
+    
     Promise.all([
         fetch(`/api/recommendationUser/`),
         fetch(`/api/recommendationTD/`), 
@@ -127,7 +128,8 @@ const getRecommendation = (cb) =>{
             data[i].forEach(el => allISBN.push(el));
         }
         let uniqueISBN = [...new Set(allISBN)];
-        localStorage.setItem('recommendations', JSON.stringify(uniqueISBN));
+        console.log(uniqueISBN)
+        // localStorage.setItem('recommendations', JSON.stringify(uniqueISBN));
         cb(shuffle(uniqueISBN));
 
         
