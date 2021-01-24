@@ -161,10 +161,10 @@ module.exports = function(app) {
     //Routes that involves user's dashboard
 
     //get all books under the user
-    app.get('/api/books/:user', (req,res) =>{
-        db.Reading.findAll({
+    app.get('/api/books/user', (req,res) =>{
+        db.Readings.findAll({
             where:{
-                UserID : req.params.user
+                UserID : req.user.id
             },
             include: [db.Books]
         }).then(books => res.json(books))
@@ -172,14 +172,14 @@ module.exports = function(app) {
     })
 
     // update a book to be completed
-    app.put('/api/books/:user', (req,res) =>{
-        db.Reading.update(
+    app.put('/api/book/', (req,res) =>{
+        db.Readings.update(
             {
                 reading: false,
                 favourite: req.body.favourite
             },{
             where : {
-                UserId: req.params.user,
+                UserId: req.user.id,
                 BookId: req.body.bookId
             }
         }).then(result => {
@@ -189,23 +189,21 @@ module.exports = function(app) {
     })
 
     // delete a book
-    app.delete('/api/books/:user/:book',(req,res) =>{
+    app.delete('/api/book/:book',(req,res) =>{
         // TODO: function to destroy a book when the user drops it
         // probably using the req.body to get the parameters
-        db.Reading.destroy({
+        db.Readings.destroy({
             where:{
-                UserId: req.params.user,
+                UserId: req.user.id,
                 BookId: req.params.book
             }
         }).then(result => {
-            console.log('deleting')
-            console.log(result)
             res.json(result)
         })
         
     });
     // add a book in the data
-    app.post('/api/books',(req,res)=>{
+    app.post('/api/book',(req,res)=>{
         db.Books.findOrCreate({
             where: {
                 ISBN: req.body.isbn
@@ -226,8 +224,8 @@ module.exports = function(app) {
     })
 
     // add a book
-    app.post('/api/books/:user',(req,res) =>{
-        db.Reading.findOrCreate({
+    app.post('/api/book/user',(req,res) =>{
+        db.Readings.findOrCreate({
             where: {
                 UserId:  req.params.user,
                 BookId:  req.body.id
@@ -258,7 +256,7 @@ module.exports = function(app) {
     //get the latests review/ratings activity - community page
     app.get('/api/all-reviews', (req,res)=>{
         console.log('hello')
-        db.Review.findAll({
+        db.Reviews.findAll({
             include: [db.Users, db.Books],
             order: [["createdAt", "DESC"]],
             limit: 5
@@ -268,7 +266,7 @@ module.exports = function(app) {
     
     // add a review/rating to the book
     app.post('/api/books/review/:book',(req,res) =>{
-        db.Review.create({
+        db.Reviews.create({
             content: req.body.content,
             rate: req.body.rating,
             UserId: req.body.user,
@@ -281,7 +279,7 @@ module.exports = function(app) {
     //get the review/ratings for that book using ISBN
     app.get('/api/books/review/:isbn', (req,res)=>{
         
-        db.Review.findAll({
+        db.Reviews.findAll({
             include: [{
                 model: db.Books, 
                 where: {
@@ -297,17 +295,17 @@ module.exports = function(app) {
     
     // recommendation function 
     
-    app.get('/api/recommendationUser/:user',(req,res) =>{
-        db.Reading.findAll({
+    app.get('/api/recommendationUser/',(req,res) =>{
+        db.Readings.findAll({
             where:{
-                UserID : req.params.user,
+                UserID : req.user.id,
                 favourite: true,
             },
             include: [db.Books]
         }).then(results => {
             let allFavouriteBooks = results.map(book => book.BookId)
             // console.log(allBooks)
-            db.Reading.findAll({
+            db.Readings.findAll({
                 where:{
                     BookId : allFavouriteBooks,
                     favourite : 1,
@@ -319,14 +317,14 @@ module.exports = function(app) {
             .then(results =>{
                 let allUsers = results.map(item => item.UserId);
                 let uniqueUsers = [...new Set(allUsers)]
-                db.Reading.findAll({
+                db.Readings.findAll({
                     where:{
                         UserID : req.params.user
                     }
                 })
                 .then(results => {
                     let allBooks = results.map(book => book.BookId);
-                    db.Reading.findAll({
+                    db.Readings.findAll({
                         where:{
                             UserID : uniqueUsers,
                             BookId : {
@@ -337,8 +335,6 @@ module.exports = function(app) {
                     })
                     .then(results => {
                         let Books = results.map(book => book.Book.isbn)
-                        // let ids = results.map(book => book.Book.id);
-                        // console.log(ids)
                         res.json(Books)
                     })
                 })
@@ -353,10 +349,10 @@ module.exports = function(app) {
         next();
     });
 
-    app.get('/api/recommendationTD/:user',(req,res) =>{
-        db.Reading.findAll({
+    app.get('/api/recommendationTD/',(req,res) =>{
+        db.Readings.findAll({
             where:{
-                UserID : req.params.user,
+                UserID : req.user.id,
                 favourite: true,
             },
             include: [db.Books]
