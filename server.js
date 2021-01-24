@@ -23,7 +23,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Handlebars
-app.engine("handlebars",exphbs({defaultLayout: "main"}));
+app.engine("handlebars",exphbs({
+  layoutsDir: __dirname + '/views/layouts',
+  defaultLayout: 'main',
+  partialsDir : __dirname+'/views/partials',
+}));
 app.set("view engine", "handlebars");
 
 
