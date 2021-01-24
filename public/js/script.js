@@ -98,16 +98,35 @@ const getBookInfo = (ISBN, cb) =>{
             pageCount : book.pageCount,
             title: book.title
         }
-        console.log(bookObj)
-        cb(bookObj);
+        console.log(ISBN)
+        fetch(`/api/books/review/${ISBN}`)
+        .then(response => response.json())
+        .then(review => {
+            console.log(review)
+            bookObj.reviews = review;
+            cb(bookObj);
+        })
     })
     .catch(error => {
         // Where the code goes for if the ISBN is not found.
         if (error.message === `Sorry, the book with ISBN ${ISBN} could not be found.`) {
            // do stuff if the ISBN is not found here"
+           getBookInfoAlternative(ISBN, cb)
         }
     })
 }
+
+// get alternative book:
+const getBookInfoAlternative = (ISBN, cb) =>{
+
+    let url = `https://openlibrary.org/api/books?bibkeys=ISBN:${ISBN}&jscmd=details&format=json`
+    fetch(url)
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data)
+    })
+}
+
 
 // get the book cover url
 const getBookCover = (ISBN) =>{
