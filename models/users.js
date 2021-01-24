@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Users = sequelize.define('Users', {
+    let Users = sequelize.define('Users', {
       // userID: {
       //   type: DataTypes.INTEGER,
       //   allowNull: false,
@@ -24,19 +24,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [1, 60],
+          len: [1, 140],
         }
       },
     });
   
-    Users.associate = (models) => {
-      // Associating Users with Reading Books and Review
-      // When a User is deleted, also delete any associated Reading Books, Review
-      models.Users.hasMany(models.Reading, models.Review, {
-        onDelete: 'cascade',
-        //foreignKey: 'bookID'
-      });
-    };
+    // Users.associate = (models) => {
+    //   // Associating Users with Reading Books and Review
+    //   // When a User is deleted, also delete any associated Reading Books, Review
+
+    //   models.Users.hasMany(models.Readings, models.Reviews, {
+
+    //     onDelete: 'cascade',
+    //     //foreignKey: 'bookID'
+    //   });
+    // };
   
     return Users;
   };
