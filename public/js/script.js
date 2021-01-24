@@ -1,15 +1,17 @@
+const fetch = require("node-fetch");
+
 // Search function using the OpenLibrary API with the Book Title - must match   - used when user wants to add a book that they have already read 
-const searchByTitle = (title,cb) =>{
+const searchByTitle = (title,cb) => {
     // let title = "Life after life"; //to be change for user input
     let url = "http://openlibrary.org/search.json?title=";
 
     fetch(url+title)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         let bookList =[];
         let authorUnique = [];
-        data.docs.forEach(book =>{
+        data.docs.forEach(book => {
             if(book.author_name !== undefined) {
                 if(book.isbn !== undefined) {
                     if(book.title.toLowerCase() == title.toLowerCase()){
@@ -30,10 +32,9 @@ const searchByTitle = (title,cb) =>{
                     }
                 } 
             }
-        })
-        console.log(bookList);
         cb(bookList)
-    })
+        })
+    });
 }
 
 // Search function using the OpenLibrary API with author - used when user wants to add a book that they have already read 
@@ -44,7 +45,7 @@ const searchByAuthor = (author, cb) => {
     fetch(url+author)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         let bookList =[];
         let titleUnique = [];
         data.docs.forEach(book =>{
@@ -67,12 +68,12 @@ const searchByAuthor = (author, cb) => {
                 } 
             }
         })
-        console.log(bookList);
+        // console.log(bookList);
         cb(bookList)
     })
 }
 
-// Get New Book information from the ISBN - possibly be used when user clicks on a book recommendation
+// Get New Book information from the ISBN - possibly to be used when user clicks on a book recommendation
 const getBookInfo = (ISBN, cb) =>{
         
     let url = `https://www.googleapis.com/books/v1/volumes?q=ISBN:${ISBN}`;
@@ -80,8 +81,17 @@ const getBookInfo = (ISBN, cb) =>{
     fetch(url)
     .then(response =>response.json())
     .then(data =>{
-        console.log(data);
+        // console.log(data);
         let book = data.items[0].volumeInfo;
+
+        // added this bit of code to catch if the Google API does not get the correct book from the ISBN
+        // this will also catch if the book with a specific ISBN just does not exist
+        let correctBook = ISBN === book.industryIdentifiers.find(ISBN => ISBN.type === "ISBN_13").identifier;
+        if (!correctBook) {
+            console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
+            throw new Error (`Sorry, the book with ISBN ${ISBN} could not be found.`);
+        } 
+
         let bookObj = {
             author: book.authors,
             description: book.description,
@@ -90,6 +100,12 @@ const getBookInfo = (ISBN, cb) =>{
         }
         console.log(bookObj)
         cb(bookObj);
+    })
+    .catch(error => {
+        // Where the code goes for if the ISBN is not found.
+        if (error.message === `Sorry, the book with ISBN ${ISBN} could not be found.`) {
+           // do stuff if the ISBN is not found here"
+        }
     })
 }
 
@@ -108,10 +124,10 @@ const shuffle =  (array) => {
     return array;
   }
 
-const getRecommendation = (user_id, cb) =>{
+const getRecommendation = (cb) =>{
     Promise.all([
-        fetch(`/api/recommendationUser/${user_id}`),
-        fetch(`/api/recommendationTD/${user_id}`), 
+        fetch(`/api/recommendationUser/`),
+        fetch(`/api/recommendationTD/`), 
         fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
@@ -184,4 +200,14 @@ const addBookToList = (bookObj,reading,user_id,cb) => {
         })
     })
 }
+
+module.exports = { 
+    searchByTitle, 
+    searchByAuthor, 
+    getBookInfo, 
+    getBookCover, 
+    getRecommendation, 
+    addBookToList, 
+}
+
 
