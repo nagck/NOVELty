@@ -1,4 +1,5 @@
-var isAuthenticated = require("../config/middleware/isAuthenticated"); 
+const isAuthenticated = require("../config/middleware/isAuthenticated"); 
+const db = require("../models");
 
 module.exports = function(app) {
 // index page - login or singup
@@ -35,7 +36,19 @@ module.exports = function(app) {
     });
 
   app.get('/index',isAuthenticated, (req,res)=>{
-    res.render('index', {});
+    db.Reading.findAll({
+      where: {
+        UserID: req.user.id
+      }
+    })
+    .then(results =>{
+      console.log('logging in')
+      console.log(results)
+      res.render('index', {whichPartial: function() {
+        return "header/no-header";
+      }});
+    })
+    
   });
 
   app.get('/community',isAuthenticated, (req,res)=>{

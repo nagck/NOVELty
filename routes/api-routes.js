@@ -113,16 +113,15 @@ module.exports = function(app) {
     // signup - would need to make sure that the fields for the User model matches here
     app.post("/api/signup", (req, res) => {
         db.Users.create({
-            name: req.body.name,
+            name: req.body.username,
             email: req.body.email,
-            password: req.body.password
+            password_digest: req.body.password
         })
         .then(() => {
             // res.redirect(307, "/newuser");
             res.redirect(307, "/api/login")
         })
         .catch((err) => {
-            console.log(err)
             res.status(401).json(err);
         });
     });

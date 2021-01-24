@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "octosoft",
-    "database": "book_demo2",
-    "host": "127.0.0.1",
+    "username": "eqjjzwj12hvyya2w",
+    "password": "te13hufefqwqy42s",
+    "database": "fp20mqz7whfgpjh4",
+    "host": "cis9cbtgerlk68wl.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {
