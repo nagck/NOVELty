@@ -54,13 +54,49 @@
         <div class="loader"></div>
     </div>
 
-<div class="col-md-8 col-lg-6">
-    <ul id="lightSlider-recommendation" class="hide">
-    
-    </ul>
-</div>
+    <div class="col-md-8 col-lg-6">
+        <ul id="lightSlider-recommendation" class="hide">
+        
+        </ul>
+    </div>
 
 </div>
+
+
+
+<!-- Modal for viewing book -->
+<div class="modal fade" id="modal-new-book" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">New book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="book-cover">
+        </div>
+        <div>
+          Title: <span id='book-title'></span>
+          <br>
+          Author: <span id='book-author'></span>
+          <br>
+          Page Count: <span id='book-page'></span>
+          <br>
+          Description: <span id='book-description'></span>
+          <br>
+        </div>
+        <button class="btn btn-primary" id="add-book">Add to Reading list</button>
+        <div id="book-review">
+
+        </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {{!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> --}}
 <script src="./js/script.js"></script>
