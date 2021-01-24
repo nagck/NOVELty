@@ -36,6 +36,7 @@ module.exports = function(app) {
     });
 
   app.get('/index',isAuthenticated, (req,res)=>{
+    console.log(req.user.id)
     db.Readings.findAll({
       where: {
         UserID: req.user.id

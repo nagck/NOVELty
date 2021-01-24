@@ -25,7 +25,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">{{{bookSearch}}}</h4> 
+                    {{!-- <h4 class="modal-title">{{{bookSearch}}}</h4>  --}}
                 </div>
                 <div class="modal-body">
                     <p>Searching...</p>
@@ -41,27 +41,27 @@
     <h3>Books you have finished reading:</h3>
 
     <ul>
-        {{#each books}}
+        {{!-- {{#each books}}
         {{#unless reading}}
         {{> books/books-block read=true}}
         {{/unless}}
-        {{/each}}
+        {{/each}} --}}
     </ul>
 
     <h2>Recommended titles for you:</h2>
 
-    <div id="recommendation-list">
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
+    <div id="recommendation-placeholder">
+        <div class="loader"></div>
     </div>
 
+<div class="col-md-8 col-lg-6">
     <ul id="lightSlider-recommendation" class="hide">
- 
+    
     </ul>
-
+</div>
 
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="js/lightslider.js"></script>
+{{!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> --}}
+<script src="./js/script.js"></script>
+<script src="./js/index.js"></script>
