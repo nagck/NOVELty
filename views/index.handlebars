@@ -3,22 +3,7 @@
 <div class="dashboard-view">
     <h2> DASHBOARD</h2>
 
-    <h3>Books on your Reading and To-Read List:</h3>
-
-
-    <ul id="lightSlider">
-
-        {{#each books}}
-        {{#if book.reading}}
-        <li>
-            <img src="{{book.URL}}" "data-isbn"={{book.ISBN}} alt="{{book.title}}">
-        </li>
-        {{/if}}
-        {{/each}}
-    
-    </ul>
-
-<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm2">Add a book</button>
+    <p>Read a book recently? Looking for a book? Click the button to add it to your lists</p><button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm2">Add a book</button>
 
             <div class="modal fade bs-example-modal-sm2">
             <div class="modal-dialog">
@@ -37,6 +22,23 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
             </div>
+
+    <h3>Books on your Reading and To-Read List:</h3>
+
+
+    <ul id="lightSlider">
+
+        {{#each books}}
+        {{#if book.reading}}
+        <li>
+            <img src="{{book.URL}}" "data-isbn"={{book.ISBN}} alt="{{book.title}}">
+        </li>
+        {{/if}}
+        {{/each}}
+    
+    </ul>
+
+
 
     <h3>Books you have finished reading:</h3>
 

@@ -65,3 +65,7 @@ body {
   width: 70%;
   margin: auto;
 }
+
+.dashboard-view {
+  padding-left: 50px;
+}
