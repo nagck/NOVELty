@@ -115,7 +115,7 @@ module.exports = function(app) {
         db.Users.create({
             name: req.body.username,
             email: req.body.email,
-            password_digest: req.body.password
+            password: req.body.password
         })
         .then(() => {
             // res.redirect(307, "/newuser");

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Reading = sequelize.define('Reading', {
+    const Readings = sequelize.define('Readings', {
       // readID: {
       //   type: DataTypes.INTEGER,
       //   allowNull: false,
@@ -18,19 +18,19 @@ module.exports = (sequelize, DataTypes) => {
       },
     });
   
-    Reading.associate = (models) => {
-      models.Reading.belongsTo(models.Users, {
+    Readings.associate = (models) => {
+      models.Readings.belongsTo(models.Users, {
         foreignKey: {
           allowNull: false,
         },
       });
-      models.Reading.belongsTo(models.Books, {
+      models.Readings.belongsTo(models.Books, {
           foreignKey: {
             allowNull: false,
           },
       });
     };
   
-    return Reading;
+    return Readings;
 };
   
