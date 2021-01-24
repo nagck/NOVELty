@@ -1,11 +1,5 @@
 const fetch = require("node-fetch");
 
-// const test = (title,cb) => {
-//     fetch("https://xkcd.com/614/info.0.json")
-//     .then(data => data.json())
-//     .then(console.log(data))
-// }
-
 // Search function using the OpenLibrary API with the Book Title - must match   - used when user wants to add a book that they have already read 
 const searchByTitle = (title,cb) => {
     // let title = "Life after life"; //to be change for user input
@@ -79,7 +73,7 @@ const searchByAuthor = (author, cb) => {
     })
 }
 
-// Get New Book information from the ISBN - possibly be used when user clicks on a book recommendation
+// Get New Book information from the ISBN - possibly to be used when user clicks on a book recommendation
 const getBookInfo = (ISBN, cb) =>{
         
     let url = `https://www.googleapis.com/books/v1/volumes?q=ISBN:${ISBN}`;
@@ -89,14 +83,29 @@ const getBookInfo = (ISBN, cb) =>{
     .then(data =>{
         // console.log(data);
         let book = data.items[0].volumeInfo;
+
+        // added this bit of code to catch if the Google API does not get the correct book from the ISBN
+        // this will also catch if the book with a specific ISBN just does not exist
+        let correctBook = ISBN === book.industryIdentifiers.find(ISBN => ISBN.type === "ISBN_13").identifier;
+        if (!correctBook) {
+            console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
+            throw new Error (`Sorry, the book with ISBN ${ISBN} could not be found.`);
+        } 
+
         let bookObj = {
             author: book.authors,
             description: book.description,
             pageCount : book.pageCount,
             title: book.title
         }
-        // console.log(bookObj)
+        console.log(bookObj)
         cb(bookObj);
+    })
+    .catch(error => {
+        // Where the code goes for if the ISBN is not found.
+        if (error.message === `Sorry, the book with ISBN ${ISBN} could not be found.`) {
+           // do stuff if the ISBN is not found here"
+        }
     })
 }
 
@@ -199,7 +208,6 @@ module.exports = {
     getBookCover, 
     getRecommendation, 
     addBookToList, 
-    test,
 }
 
 

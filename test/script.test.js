@@ -1,3 +1,4 @@
+// The following functions test the API calls in the public/js/script.js file
 const { 
     searchByTitle,
     searchByAuthor,
@@ -5,7 +6,6 @@ const {
     getBookCover, 
     getRecommendation, 
     addBookToList, 
-    // test,
  } = require('../public/js/script')
 
 describe('search by title', () => {
@@ -24,8 +24,6 @@ describe('search by title', () => {
         searchByTitle(title, callback)
     })
 });
-
-// didn't actually test the below to save API calls, but it should work the same as above test, hopefully ;)
 
 describe('search by author', () => {
 
@@ -47,15 +45,16 @@ describe('search by author', () => {
 describe('search by ISBN', () => {
 
     test('should get the book by ISBN if it exists', done => {
-        // this particular ISBN does not return expected results :(
-        let ISBN = "9780316074223";
-        let author = "David Foster Wallace"
-        let title = "The Pale King"
+
+        let ISBN = "9780007173112";
+        let author = "Dr. Seuss"
+        let title = "The Lorax"
         let callback = (result) => {
             try { 
-                let check_author = result.map(item => item.author.map(author => author.split(',').map(name => name.trim().toLowerCase()).reverse().join(' '))).flat();
+                // flips the authors' name to first last and converts to lower case
+                let check_author = result.author.map(author => author.split(',').map(name => name.trim().toLowerCase()).reverse().join(' '));
                 expect(check_author).toContain(author.toLowerCase())
-                expect(result.title.toLowerCase()).toBe(expect.stringContaining(title.toLowerCase()))
+                expect(result.title.toLowerCase()).toBe(title.toLowerCase())
                 done();
             }
             catch (error) {
@@ -63,5 +62,15 @@ describe('search by ISBN', () => {
             }
         }
         getBookInfo(ISBN, callback)
+    })
+});
+
+describe('get book cover link', () => {
+
+    it('should get the link to a book cover for a given ISBN if it exists', () => {
+        // this particular ISBN does not return expected results :(
+        let ISBN = "9780316074223";
+        result = getBookCover(ISBN)
+        expect(result).toBe("http://covers.openlibrary.org/b/isbn/9780316074223-M.jpg")
     })
 });
