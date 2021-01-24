@@ -53,7 +53,9 @@ module.exports = function(app) {
   });
 
   app.get('/community',isAuthenticated, (req,res)=>{
-    res.render('community', {});
+    res.render('community', {whichPartial: function() {
+      return "header/header-community";
+    }});
   });
 
   // Do we need a profile page so that they can change their password?
