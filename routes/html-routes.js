@@ -3,33 +3,39 @@ var isAuthenticated = require("../config/middleware/isAuthenticated");
 module.exports = function(app) {
 // index page - login or singup
   app.get('/', (req,res)=>{
-    console.log('hi')
     if (req.user) {
-      res.redirect("/home");
+      res.redirect("index");
     }
-    res.render('partials/header/header-block',{layout: 'main'});
+    res.render('home',{whichPartial: function() {
+      return "header/header-block";
+    }});
   });
 
   // login page
   app.get('/login', (req,res)=>{
     if (req.user) {
-      res.redirect("/home");
+      res.redirect("index");
     }
-    res.render('login', {});
+    res.render('home', {whichPartial: function() {
+      return "login/login-block";
+    }});
   });
 
   // signup page
   app.get('/signup', (req,res)=>{
-    res.render('signup', {});
+    res.render('home', {whichPartial: function() {
+      return "signup/signup-block";
+    }});
   });
 
+  // These need to be changed
     // newuser page
   app.get('/newuser', (req,res)=>{
     res.render('newuser', {});
     });
 
-  app.get('/home',isAuthenticated, (req,res)=>{
-    res.render('home', {});
+  app.get('/index',isAuthenticated, (req,res)=>{
+    res.render('index', {});
   });
 
   app.get('/community',isAuthenticated, (req,res)=>{
