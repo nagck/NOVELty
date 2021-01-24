@@ -42,3 +42,6 @@ body {
   font-size: 25px;
 }
 
+.hide {
+  visibility: hidden;
+}

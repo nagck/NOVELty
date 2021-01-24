@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "eqjjzwj12hvyya2w",
+    "password": "te13hufefqwqy42s",
+    "database": "fp20mqz7whfgpjh4",
+    "host": "cis9cbtgerlk68wl.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
