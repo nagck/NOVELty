@@ -124,10 +124,10 @@ const shuffle =  (array) => {
     return array;
   }
 
-const getRecommendation = (user_id, cb) =>{
+const getRecommendation = (cb) =>{
     Promise.all([
-        fetch(`/api/recommendationUser/${user_id}`),
-        fetch(`/api/recommendationTD/${user_id}`), 
+        fetch(`/api/recommendationUser/`),
+        fetch(`/api/recommendationTD/`), 
         fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
