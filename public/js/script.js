@@ -124,6 +124,24 @@ const getBookInfoAlternative = (ISBN, cb) =>{
     .then(response => response.json())
     .then(data =>{
         console.log(data)
+        let key = `ISBN:${ISBN}`;
+        let book = data[key].details;
+        let authors = book.authors.map(author => author.name);
+        let description = (book.description) ? book.description : "None availabe";
+        let bookObj = {
+            author: authors,
+            description: book.description,
+            pageCount : book.pagination,
+            title: book.title
+        }
+        console.log(bookObj);
+        fetch(`/api/books/review/${ISBN}`)
+        .then(response => response.json())
+        .then(review => {
+            console.log(review)
+            bookObj.reviews = review;
+            cb(bookObj);
+        })
     })
 }
 
