@@ -31,14 +31,14 @@ module.exports = (sequelize, DataTypes) => {
 
     });
   
-    Books.associate = (models) => {
-      // Associating Books with Review
-      // When a Book is deleted, also delete any associated Review
-      models.Books.hasMany(models.Review, models.Reading, {
-        onDelete: 'cascade',
-        //foreignKey: 'userID'
-      });
-    };
+    // Books.associate = (models) => {
+    //   // Associating Books with Review
+    //   // When a Book is deleted, also delete any associated Review
+    //   models.Books.hasMany(models.Review, models.Reading, {
+    //     onDelete: 'cascade',
+    //     //foreignKey: 'userID'
+    //   });
+    // };
   
     return Books;
   };

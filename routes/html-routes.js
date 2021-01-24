@@ -3,10 +3,11 @@ var isAuthenticated = require("../config/middleware/isAuthenticated");
 module.exports = function(app) {
 // index page - login or singup
   app.get('/', (req,res)=>{
+    console.log('hi')
     if (req.user) {
       res.redirect("/home");
     }
-    res.render('index', {});
+    res.render('partials/header/header-block',{layout: 'main'});
   });
 
   // login page
