@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       // },
       reading: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
+        defaultValue: true
       },
       favourite: {
         type: DataTypes.BOOLEAN,

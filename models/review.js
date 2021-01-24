@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Review.associate = (models) => {
         // We're saying that a Review should belong to a User
-        // A Reviww can't be created without a User due to the foreign key constraint
+        // A Review can't be created without a User due to the foreign key constraint
         models.Review.belongsTo(models.Users, {
             foreignKey: {
               allowNull: false,
