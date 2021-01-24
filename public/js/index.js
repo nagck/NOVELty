@@ -32,7 +32,24 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
         if(e.target.matches("img")){
-            console.log(e.target);
+            console.log($(e.target).attr("data-isbn"))
+            getBookInfo($(e.target).attr("data-isbn"), data=>{
+                console.log(data)
+    
+                $("#modal-new-book").attr("data-isbn", $(e.target).attr("data-isbn"))
+                $("#book-cover").html(`<img src='${getBookCover($(e.target).attr("data-isbn"))}'>`)
+                $("#book-title").text(data.title)
+                $("#book-author").text(data.author)
+                $("#book-page").text(data.pageCount)
+                $("#book-description").text(data.description)
+                
+                $("#book-review").html("");
+                data.reviews.forEach(el =>{
+                    $("#book-review").append(`<p>Rating: ${el.rating}</p><p>${el.content}</p><p>-${el.User.username}</p>`)
+                })
+    
+                $("#modal-new-book").modal("show")
+            })
         }
     })
 
