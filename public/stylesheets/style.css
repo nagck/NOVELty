@@ -66,6 +66,10 @@ body {
   margin: auto;
 }
 
+li img {
+  height: 250px;
+  width: 200px;
+}
 
 .rating {
   display: flex;

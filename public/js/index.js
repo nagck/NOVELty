@@ -1,10 +1,11 @@
-window.globals = {
-    current: "",
-    past: ""
-};
+
 
 $(document).ready(function() {
-    
+    window.globals = {
+        current: "",
+        past: ""
+    };
+
     fetch("/api/get_user").then(response => response.json())
     .then(function(data) {
       $("#name-of-user").text(data.name);
@@ -15,6 +16,7 @@ $(document).ready(function() {
         item:3,
         slideMove:1,
         easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
+        slideMargin: 20,
         speed:600,
         enableDrag:false,
         responsive : []
@@ -25,6 +27,7 @@ $(document).ready(function() {
         item:3,
         slideMove:1,
         easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
+        slideMargin: 20,
         speed:600,
         enableDrag:false,
         responsive : []
@@ -44,6 +47,7 @@ $(document).ready(function() {
             img.attr("data-isbn",recommendationISBN[i]);
             img.attr("alt",`ISBN: ${recommendationISBN[i]}`);
             let li = $("<li>");
+            li.attr("data-id",recommendationISBN[i])
             li.append(img);
             $("#lightSlider-recommendation").append(li)
         }
@@ -53,6 +57,7 @@ $(document).ready(function() {
             // autoWidth:true,
             slideMove:1,
             easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
+            slideMargin: 20,
             speed:600,
             enableDrag:false,
             responsive : []
@@ -80,7 +85,7 @@ $(document).ready(function() {
                 
                 $("#book-review").html("");
                 data.reviews.forEach(el =>{
-                    $("#book-review").append(`<p>Rating: ${el.rating}</p><p>${el.content}</p><p>-${el.User.username}</p>`)
+                    $("#book-review").append(`<p>Rating: ${el.rate}</p><p>${el.content}</p><p>-${el.User.name}</p>`)
                 })
     
                 $("#modal-new-book").modal("show")
@@ -100,9 +105,10 @@ $(document).ready(function() {
         addBookToList(bookObj,true, (notExists, data)=>{
 
             if(notExists[1]){
-
                
-                $("#lightSlider-current").append($(`li img[data-isbn='${$("#modal-new-book").attr("data-isbn")}'`))
+                // $("#lightSlider-current").append($(`li img[data-isbn='${$("#modal-new-book").attr("data-isbn")}']`))
+                
+                $("#lightSlider-current").append($(`li[data-id='${$("#modal-new-book").attr("data-isbn")}']`))
                 globals.current.refresh();
                 
             }
@@ -130,8 +136,9 @@ $(document).ready(function() {
         let finished = $("input[type='radio'][name='flexRadioDefault']:checked").val();
         let rating = parseInt($("input[type='radio'][name='rating']:checked").val());
         let content = $("textarea").val();
+        let isbn = $("#modal-rating").attr("data-isbn");
 
-        fetch(`/api/book/${$("#modal-rating").attr("data-isbn")}`)
+        fetch(`/api/book/${isbn}`)
             .then(response => response.json())
             .then(data => {
                 let bookId = data[0].id;
@@ -153,14 +160,19 @@ $(document).ready(function() {
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
-                        $("#lightSlider-past").append($(`li img[data-isbn='${$("#modal-rating").attr("data-isbn")}'`));
-                        globals.past.refresh();
+                        
+                        console.log($("#modal-rating").attr("data-isbn"))
+                        console.log($(`li[data-id='${isbn}']`));
+
+                        // $("#lightSlider-past").append($(`li img[data-isbn='${isbn}']`));
+                        $("#lightSlider-past").append($(`li[data-id='${isbn}']`));
                         $("#modal-rating").attr("data-isbn", "");
                         $("#finished").prop('checked', true);        
-                        $('input[name=rating]').attr('checked',false);                
+                        $('input:radio[name="rating"]').attr('checked',false);                
                         $("textarea").val("");
                         $("#modal-rating").modal("hide") 
+                        globals.past.refresh();
+                        console.log('why is it not working anymore')
                     })
                 }
                 else{
@@ -169,12 +181,14 @@ $(document).ready(function() {
                     })
                     .then(response => response.json())
                     .then(data =>{
-                        console.log(data);
-                        $(`img[data-isbn='${$("#modal-rating").attr("data-isbn")}'`).remove();
+                        console.log($("#modal-rating").attr("data-isbn"));
+                        // $(`li img[data-isbn='${isbn}']`).remove();
+                        $(`li[data-id='${isbn}']`).remove();
                         $("#modal-rating").attr("data-isbn", "");
                         $("#finished").prop('checked', true);        
-                        $('input[name=rating]').attr('checked',false);                
+                        $('input:radio[name="rating"]').attr('checked',false);                
                         $("textarea").val("");
+                        globals.current.refresh();
                         $("#modal-rating").modal("hide") 
                     })
                 }
@@ -260,10 +274,10 @@ $(document).ready(function() {
       e.preventDefault();
       if(e.target.matches("li")) {
             let bookObj = JSON.parse(JSON.stringify(e.target.dataset));
-
+            let reading = ($('#exampleModalCenter').attr("data-search") === "current") ? true : false;
             console.log(bookObj); 
 
-            addBookToList(bookObj,false, (notExists, data)=>{
+            addBookToList(bookObj,reading, (notExists, data)=>{
                 console.log(notExists)
                 console.log(data)
                 if(notExists[1]){
@@ -273,8 +287,11 @@ $(document).ready(function() {
                     img.attr("data-isbn",data[0].ISBN);
                     img.attr("atl",data[0].name);
                     let li = $("<li>");
+                    li.attr("data-id",data[0].ISBN)
                     li.append(img);
+                    console.log(li)
                     if($('#exampleModalCenter').attr("data-search") === "current") {
+                        console.log('it makes no sense')
                         $("#lightSlider-current").append(li);
                         globals.current.refresh();
                     }

@@ -12,6 +12,8 @@ const Op = Sequelize.Op;
 const recommendationTasteDiveArray = (titles, cb) =>{
     let book = `${titles.splice(0,1)}`;
     let apikey = process.env.MYAPIKEY_TD;
+    console.log('testing tastedive');
+    console.log(book)
     if(book.trim() === "") {
         cb(false);
     }
@@ -61,7 +63,6 @@ const findISNB = (titles,isbnArray, cb) =>{
     else{
         let title = titles.splice(0,1)[0];
         let url = "http://openlibrary.org/search.json?title=";
-        try{
             fetch(url+title)
             .then(response => response.json())
             .then(data => {
@@ -85,11 +86,10 @@ const findISNB = (titles,isbnArray, cb) =>{
                 }
                 findISNB(titles,isbnArray, cb);            
             })
-        }
-        catch(err) {
-            console.log(err)
-            findISNB(titles,isbnArray, cb);  
-        }
+            .catch(err=> {
+                console.log(err)
+                findISNB(titles,isbnArray, cb);  
+            })     
         
     }
     
@@ -188,8 +188,12 @@ module.exports = function(app) {
                 BookId: req.body.bookId
             }
         }).then(result => {
-            // console.log(result)
+            console.log('updating to past')
+            console.log(result)
             res.json(result)
+        })
+        .catch(err =>{
+            console.log(err)
         })
     })
 
@@ -216,7 +220,7 @@ module.exports = function(app) {
             defaults: {
                 name: req.body.title,
                 author: req.body.author,
-                URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg`
+                URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg?default=false`
             }
         })
         .then(() =>{
@@ -241,6 +245,8 @@ module.exports = function(app) {
             }
         })
         .then((data) =>{
+            console.log('adding book to user')
+            console.log(data)
             res.json(data)
         })
         .catch(err => res.status(401).json(err))
@@ -371,7 +377,7 @@ module.exports = function(app) {
                 shuffle(allBooks);
                 recommendationTasteDiveArray(allBooks, data => {
                     if(!data) {
-                        res.status(500);
+                        res.json([]);
                     }
                     else {
                         let isbnArray = [];
