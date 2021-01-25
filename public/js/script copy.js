@@ -2,18 +2,84 @@
 
 // Search function using the OpenLibrary API with the Book Title - must match   - used when user wants to add a book that they have already read 
 const searchByTitle = (title,cb) => {
-    fetch(`/api/search/title/${title}`)
+    // let title = "Life after life"; //to be change for user input
+    let url = "http://openlibrary.org/search.json?title=";
+
+    fetch(url+title)
     .then(response => response.json())
-    .then(data => cb(data))
-    .catch(err => console.log(err))
+    .then(data => {
+        console.log(data);
+        let bookList =[];
+        let authorUnique = [];
+        data.docs.forEach(book => {
+            console.log(book)
+            if(book.author_name !== undefined) {
+                if(book.isbn !== undefined) {
+                    if(book.title.toLowerCase() == title.toLowerCase()){
+                        if(authorUnique.indexOf(book.author_name[0].toLowerCase().trim())==-1) {
+                            let isbn = book.edition_key[0];
+                            // if(book.id_alibris_id) isbn = book.id_alibris_id[0];
+                            // else{
+                            //     for(let i = 0; i < book.isbn.length; i++){
+                            //         if(book.isbn[i].startsWith('9780')) {
+                            //             isbn = book.isbn[i];
+                            //         }
+                            //     }
+                            // }  
+                            bookList.push({
+                                author: book.author_name,
+                                title: book.title,
+                                isbn: isbn
+                            });
+                        }
+                        authorUnique.push(book.author_name[0].toLowerCase().trim());
+                        console.log(authorUnique)
+                    }
+                } 
+            }
+            cb(bookList.slice(0,Math.min(10, bookList.length)))
+        })
+    });
 }
 
 // Search function using the OpenLibrary API with author - used when user wants to add a book that they have already read 
 const searchByAuthor = (author, cb) => {
-    fetch(`/api/search/author/${author}`)
+    // let author = "J. K. Rowling"; //to be change for user input
+    let url = "http://openlibrary.org/search.json?author=";
+
+    fetch(url+author)
     .then(response => response.json())
-    .then(data => cb(data))
-    .catch(err => console.log(err))
+    .then(data => {
+        console.log(data);
+        let bookList =[];
+        let titleUnique = [];
+        data.docs.forEach(book =>{
+            if(book.author_name !== undefined) {
+                if(book.isbn !== undefined) {
+                    if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
+                        let isbn = book.edition_key[0];
+                        // if(book.id_alibris_id) isbn = book.id_alibris_id[0];
+                        // else{
+                        //     for(let i = 0; i < book.isbn.length; i++){
+                        //         if(book.isbn[i].startsWith('9780')) {
+                        //             isbn = book.isbn[i];
+                        //         }
+                        //     }
+                        // }  
+                        console.log(book)
+                        bookList.push({
+                            author: book.author_name,
+                            title: book.title,
+                            isbn: isbn
+                        });
+                    }
+                    titleUnique.push(book.title.toLowerCase().trim());
+                } 
+            }
+        })
+        // console.log(bookList);
+        cb(bookList.slice(0,Math.min(10, bookList.length)))
+    })
 }
 
 // Get New Book information from the ISBN - possibly to be used when user clicks on a book recommendation
@@ -92,9 +158,8 @@ const getBookInfoAlternative = (ISBN, cb) =>{
 
 // get alternative book:
 const getBookInfoWorks = (ISBN, cb) =>{
-    fetch(`/api/bookInfo/${ISBN}`)
-    .then(response => response.json())
-    .then(data => cb(data))
+
+    
 }
 
 

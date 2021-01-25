@@ -46,7 +46,7 @@ module.exports = function(app) {
     .then(results =>{
       console.log('logging in')
       let books = results.map(el =>{
-
+        console.log(el)
         return {
           ISBN : el.Book.dataValues.ISBN,
           URL : el.Book.dataValues.URL,
