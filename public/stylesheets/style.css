@@ -1,43 +1,126 @@
-/* form.signup,
-form.login {
-  margin-top: 50px;
-} */
 
-body {
-  background-color: #d45b5b;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    top: -120%;
+  }
+  to {
+    opacity: 1;
+    top: 0;
+    /* top:  */
+  }
 }
 
-.fixed-ratio-resize {
-  max-width: 65%;
-  height: auto;
-  width: auto\9;
-  opacity: 80%;
+form.login, form.signup {
+  top: 0;
+  position: relative;
+  transition: all;
+  box-shadow: 0px 10px 40px black;
+  border-radius: 3px;
+  background-color: #fff;
+  animation: fade-in 0.5s linear;
+}
+
+
+
+/* * {
+  border: 1px solid green;
+} */
+html {
+  height: 100%;
+  width: 100%;
+}
+
+
+.bg-image {
+  position: relative; 
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.bg-image::after {
+  content: "";
+  background-image: url("../images/critics-list.jpg");  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.3;
+  z-index: -1;
+  /* background-size: cover; */
+}
+
+.logo {
+  width: 25%;
+  border-radius: 50%;
+  opacity: 1;
+  z-index: 2;
+}
+
+.secondary-logo {
+  color: black;
+  /* font: 52px bold Helvetica, Arial; */
+  /* margin: 5px */
+}
+.secondary-logo > span:first-child {
+  color: #a08804;
+}
+
+.btn-primary:hover {
+  width: 8rem;
+  border: 2px solid #D55A5B;
+  background-color: #D55A5B;
+  color: #fff;
+  font-weight: bold;
+}
+
+.login {
+  background-color: #fff;
+}
+
+.text-primary {
+  color: #D55A5B !important;
+}
+
+.text-secondary {
+  color: black !important;
+}
+
+.btn-primary {
+  width: 8rem;
+  border: 2px solid #D55A5B;
+  background-color: #fff;
+  color: #D55A5B;
+  font-weight: bold;
 }
 
 .jumbotron {
-  background-color: #d45b5b;
+  background-color: #fff;
 }
 
 .index-image {
   max-width: 100%;
   height: auto;
-  width: auto\9;
+  width: auto;
 }
 
 .header-block {
   padding-top: 3rem;
-  text-align: center;
   font: bolder;
-  color: beige;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 35px;
+}
+
+.secondary-header a:hover{
+  text-decoration: none;
+  color: black !important;
 }
 
 .index-blurb {
   padding-left: 3rem;
   text-align: left;
   font: bold;
-  color: beige;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 25px;
 }

@@ -1,4 +1,14 @@
    {{!-- When the landing page is loaded, if user hasn't been authenticated this code should be displayed --}}
    {{!-- The links will need to be tested, the corresponding partials should render when clicked --}}
-    <span>Welcome Back! <a href="/login" title="User Log In"><u>Log In</u></a> </span><br>
-    <span>New User? <a href="/signup" title="New User Registration"><u>Register Here</u></a> </span>
+   <header class="row">
+        {{!-- This part of the header will be static --}}
+          <div class="site-header_logo col-md-12 text-center">
+              {{!-- <a href="/" title="NOVELty Homepage mx-auto"> --}}
+              <img class="logo center-block" src="./images/NOVELty.gif" alt="NOVELty logo"> 
+              {{!-- </a> --}}
+          </div>
+    </header>
+    <div class="text-center m-4">
+    <a class="btn btn-primary" href="/login" title="User Log In">login</a>
+    <a class="btn btn-primary" href="/signup" title="New User Registration">signup</a>
+    </div>
