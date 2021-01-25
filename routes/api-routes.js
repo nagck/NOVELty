@@ -12,6 +12,7 @@ const Op = Sequelize.Op;
 const recommendationTasteDiveArray = (titles, cb) =>{
     let book = `${titles.splice(0,1)}`;
     let apikey = process.env.MYAPIKEY_TD;
+    console.log('testing tastedive');
     console.log(book)
     if(book.trim() === "") {
         cb(false);
@@ -62,30 +63,34 @@ const findISNB = (titles,isbnArray, cb) =>{
     else{
         let title = titles.splice(0,1)[0];
         let url = "http://openlibrary.org/search.json?title=";
-
-        fetch(url+title)
-        .then(response => response.json())
-        .then(data => {
-            let books = data.docs;
-            for(let i = 0; i < books.length; i++){
-                let book = books[i];
-                if(book.author_name !== undefined) {
-                    if(book.isbn !== undefined) {
-                        if(book.title.toLowerCase().trim() == title.toLowerCase().trim()){
-                            for(let i = 0; i < book.isbn.length; i++){
-                                if(book.isbn[i].startsWith('9780')) {
-                                    isbn = book.isbn[i];
-                                    break;
+            fetch(url+title)
+            .then(response => response.json())
+            .then(data => {
+                let books = data.docs;
+                for(let i = 0; i < books.length; i++){
+                    let book = books[i];
+                    if(book.author_name !== undefined) {
+                        if(book.isbn !== undefined) {
+                            if(book.title.toLowerCase().trim() == title.toLowerCase().trim()){
+                                for(let i = 0; i < book.isbn.length; i++){
+                                    if(book.isbn[i].startsWith('9780')) {
+                                        isbn = book.isbn[i];
+                                        break;
+                                    }
                                 }
+                                isbnArray.push(isbn);
+                                break;
                             }
-                            isbnArray.push(isbn);
-                            break;
-                        }
-                    } 
+                        } 
+                    }
                 }
-            }
-            findISNB(titles,isbnArray, cb);            
-        })
+                findISNB(titles,isbnArray, cb);            
+            })
+            .catch(err=> {
+                console.log(err)
+                findISNB(titles,isbnArray, cb);  
+            })     
+        
     }
     
 }
@@ -183,8 +188,12 @@ module.exports = function(app) {
                 BookId: req.body.bookId
             }
         }).then(result => {
+            console.log('updating to past')
             console.log(result)
             res.json(result)
+        })
+        .catch(err =>{
+            console.log(err)
         })
     })
 
@@ -211,7 +220,7 @@ module.exports = function(app) {
             defaults: {
                 name: req.body.title,
                 author: req.body.author,
-                URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg`
+                URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg?default=false`
             }
         })
         .then(() =>{
@@ -236,6 +245,8 @@ module.exports = function(app) {
             }
         })
         .then((data) =>{
+            console.log('adding book to user')
+            console.log(data)
             res.json(data)
         })
         .catch(err => res.status(401).json(err))
@@ -255,7 +266,6 @@ module.exports = function(app) {
 
     //get the latests review/ratings activity - community page
     app.get('/api/all-reviews', (req,res)=>{
-        console.log('hello')
         db.Reviews.findAll({
             include: [db.Users, db.Books],
             order: [["createdAt", "DESC"]],
@@ -269,7 +279,7 @@ module.exports = function(app) {
         db.Reviews.create({
             content: req.body.content,
             rate: req.body.rating,
-            UserId: req.body.user,
+            UserId: req.user.id,
             BookId: req.params.book
         })
         .then(result => res.json(result))
@@ -304,8 +314,6 @@ module.exports = function(app) {
             include: [db.Books]
         }).then(results => {
             let allFavouriteBooks = results.map(book => book.BookId)
-            console.log('user recommendation')
-            console.log(allFavouriteBooks)
             if(allFavouriteBooks.length != 0){
                 db.Readings.findAll({
                     where:{
@@ -336,7 +344,7 @@ module.exports = function(app) {
                             include: [db.Books]
                         })
                         .then(results => {
-                            let Books = results.map(book => book.Book.isbn)
+                            let Books = results.map(book => book.Book.ISBN)
                             res.json(Books)
                         })
                     })
@@ -364,17 +372,16 @@ module.exports = function(app) {
             },
             include: [db.Books]
         }).then(books => {
-            let allBooks = books.map(book => book.Book.title)
+            let allBooks = books.map(book => book.Book.name)
             if(allBooks.length != 0){
                 shuffle(allBooks);
                 recommendationTasteDiveArray(allBooks, data => {
                     if(!data) {
-                        res.status(500);
+                        res.json([]);
                     }
                     else {
                         let isbnArray = [];
                         let titles = data.Similar.Results.map(element => element.Name)
-                        console.log(titles)
                         findISNB(titles, isbnArray, data =>{
                             res.json(data)
                         })

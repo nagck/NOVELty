@@ -8,31 +8,35 @@ const searchByTitle = (title,cb) => {
     fetch(url+title)
     .then(response => response.json())
     .then(data => {
-        // console.log(data);
+        console.log(data);
         let bookList =[];
         let authorUnique = [];
         data.docs.forEach(book => {
             if(book.author_name !== undefined) {
                 if(book.isbn !== undefined) {
                     if(book.title.toLowerCase() == title.toLowerCase()){
-                        if(authorUnique.indexOf(book.author_key[0])==-1) {
+                        if(authorUnique.indexOf(book.author_name[0].toLowerCase().trim())==-1) {
                             let isbn = book.isbn[0];
-                            for(let i = 0; i < book.isbn.length; i++){
-                                if(book.isbn[i].startsWith('9780')) {
-                                    isbn = book.isbn[i];
+                            if(book.id_alibris_id) isbn = book.id_alibris_id[0];
+                            else{
+                                for(let i = 0; i < book.isbn.length; i++){
+                                    if(book.isbn[i].startsWith('9780')) {
+                                        isbn = book.isbn[i];
+                                    }
                                 }
-                            }
+                            }  
                             bookList.push({
                                 author: book.author_name,
                                 title: book.title,
                                 isbn: isbn
                             });
                         }
-                        authorUnique.push(book.author_key[0]);
+                        authorUnique.push(book.author_name[0].toLowerCase().trim());
+                        console.log(authorUnique)
                     }
                 } 
             }
-        cb(bookList)
+            cb(bookList.slice(0,Math.min(10, bookList.length)))
         })
     });
 }
@@ -51,25 +55,29 @@ const searchByAuthor = (author, cb) => {
         data.docs.forEach(book =>{
             if(book.author_name !== undefined) {
                 if(book.isbn !== undefined) {
-                    if(titleUnique.indexOf(book.title)==-1) {
+                    if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
                         let isbn = book.isbn[0];
-                        for(let i = 0; i < book.isbn.length; i++){
-                            if(book.isbn[i].startsWith('9780')) {
-                                isbn = book.isbn[i];
-                            }
-                        }
+                            if(book.id_alibris_id) isbn = book.id_alibris_id[0];
+                            else{
+                                for(let i = 0; i < book.isbn.length; i++){
+                                    if(book.isbn[i].startsWith('9780')) {
+                                        isbn = book.isbn[i];
+                                    }
+                                }
+                            }  
+                        console.log(book)
                         bookList.push({
                             author: book.author_name,
                             title: book.title,
                             isbn: isbn
                         });
                     }
-                    titleUnique.push(book.title);
+                    titleUnique.push(book.title.toLowerCase().trim());
                 } 
             }
         })
         // console.log(bookList);
-        cb(bookList)
+        cb(bookList.slice(0,Math.min(10, bookList.length)))
     })
 }
 
@@ -127,11 +135,13 @@ const getBookInfoAlternative = (ISBN, cb) =>{
         let key = `ISBN:${ISBN}`;
         let book = data[key].details;
         let authors = book.authors.map(author => author.name);
-        let description = (book.description) ? book.description : "None availabe";
+        let description = (book.description) ? book.description : "None available";
+        if(typeof description === Object) description = description.value
+        let pageCount = (book.pagination) ? book.pagination : "None available"
         let bookObj = {
             author: authors,
-            description: book.description,
-            pageCount : book.pagination,
+            description: description,
+            pageCount : pageCount,
             title: book.title
         }
         console.log(bookObj);
@@ -147,8 +157,32 @@ const getBookInfoAlternative = (ISBN, cb) =>{
 
 
 // get the book cover url
-const getBookCover = (ISBN) =>{
-    return `http://covers.openlibrary.org/b/isbn/${ISBN}-M.jpg`
+const checkBookCover = (ISBNarray, validISBN, cb) =>{
+    if(ISBNarray.length === 0) cb(validISBN)
+    else{
+        let ISBN = ISBNarray.splice(0,1)[0];
+        const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        let url = `http://covers.openlibrary.org/b/isbn/${ISBN}-M.jpg?default=false`
+        fetch(proxyurl+url)
+        .then(response => {
+            // console.log(response)
+            if(response.status === 404) throw new Error("book cover doesn't exist")
+            else{
+                validISBN.push(ISBN)
+                checkBookCover(ISBNarray,validISBN, cb)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            checkBookCover(ISBNarray,validISBN, cb);
+        })
+    }
+    
+}
+
+// get the book cover url
+const getBookCover = (ISBN, cb) =>{
+    return `http://covers.openlibrary.org/b/isbn/${ISBN}-M.jpg?default=false`
 }
 
 const shuffle =  (array) => {
@@ -164,9 +198,9 @@ const shuffle =  (array) => {
 const getRecommendation = (cb) =>{
     
     Promise.all([
-        // fetch(`/api/recommendationUser/`),
+        fetch(`/api/recommendationUser/`),
         // fetch(`/api/recommendationTD/`), 
-        fetch(`/api/recommendationNY/hardcover-fiction`),
+        // fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
         // Get a JSON object from each of the responses
@@ -181,9 +215,18 @@ const getRecommendation = (cb) =>{
             data[i].forEach(el => allISBN.push(el));
         }
         let uniqueISBN = [...new Set(allISBN)];
-        console.log(uniqueISBN)
-        // localStorage.setItem('recommendations', JSON.stringify(uniqueISBN));
-        cb(shuffle(uniqueISBN));
+        // console.log(uniqueISBN)
+        fetch(`/api/books/user`)
+        .then(response =>response.json())
+        .then(results =>{
+            let existingBooks = results.map(book => book.Book.ISBN);
+            let finalISBN = uniqueISBN.filter(el => existingBooks.indexOf(el) === -1);
+            
+            let validISBN = []
+            checkBookCover(finalISBN,validISBN,arr =>{
+                cb(shuffle(arr));
+            })            
+        })
 
         
     }).catch(function (error) {
@@ -232,7 +275,10 @@ const addBookToList = (bookObj,reading,cb) => {
                 },
                 body: JSON.stringify(bookObj2)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log(response)
+                return response.json()
+            })
             .then(notExists=>{
                 cb(notExists, data);
             })
