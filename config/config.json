@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "#3Ck1t0ur561",
+    "password": "octosoft",
     "database": "novelty",
     "host": "127.0.0.1",
     "dialect": "mysql"
