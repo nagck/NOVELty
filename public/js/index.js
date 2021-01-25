@@ -84,9 +84,15 @@ $(document).ready(function() {
                 $("#book-description").text(data.description)
                 
                 $("#book-review").html("");
-                data.reviews.forEach(el =>{
-                    $("#book-review").append(`<p>Rating: ${el.rate}</p><p>${el.content}</p><p>-${el.User.name}</p>`)
-                })
+                if(data.reviews.length == 0) $("#book-review").html("None available at the moment");
+                else{
+                    data.reviews.forEach(el =>{
+                        let stars = $("<p></p>");
+                        addStars(el.rate, stars)
+                        $("#book-review").append(stars)
+                        $("#book-review").append(`<p>${el.content}</p><p>-${el.User.name}</p>`)
+                    })
+                }
                 console.log(parseInt($("input[type='radio'][name='rating']:checked").val()))
                 $("#modal-new-book").modal("show")
 
@@ -143,7 +149,7 @@ $(document).ready(function() {
     $("#rating-form").submit((e)=>{
         e.preventDefault();
         e.stopPropagation();
-        let finished = $("input[type='radio'][name='flexRadioDefault']:checked").val();
+        let finished = $("input[type='radio'][name='done']:checked").val();
         let rating = parseInt($("input[type='radio'][name='rating']:checked").val());
         let content = $("textarea").val();
         let isbn = $("#modal-rating").attr("data-isbn");
@@ -264,7 +270,7 @@ $(document).ready(function() {
         });
   });
 
-  $('#exampleModalCenter').on('show.bs.modal', function (event) {
+  $('#modal-search').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget) // Button that triggered the modal
     let type = button.data('search') // Extract info from data-* attributes
     let modal = $(this)
@@ -276,7 +282,7 @@ $(document).ready(function() {
       e.preventDefault();
       if(e.target.matches("li")) {
             let bookObj = JSON.parse(JSON.stringify(e.target.dataset));
-            let reading = ($('#exampleModalCenter').attr("data-search") === "current") ? true : false;
+            let reading = ($('#modal-search').attr("data-search") === "current") ? true : false;
             console.log(bookObj); 
 
             addBookToList(bookObj,reading, (notExists, data)=>{
@@ -292,7 +298,7 @@ $(document).ready(function() {
                     li.attr("data-id",data[0].ISBN)
                     li.append(img);
                     console.log(li)
-                    if($('#exampleModalCenter').attr("data-search") === "current") {
+                    if($('#modal-search').attr("data-search") === "current") {
                         console.log('it makes no sense')
                         $("#lightSlider-current").append(li);
                         globals.current.refresh();
@@ -305,10 +311,17 @@ $(document).ready(function() {
                 titleInput.val("");
                 authorInput.val("")
                 resultsList.empty();
-                $("#exampleModalCenter").modal('hide');
+                $("#modal-search").modal('hide');
             })
     }
 
     })
+
+    const addStars = (num, appendLocation) =>{
+        for(let i = 0; i < 5; i++){
+            if(i < num) appendLocation.append(`<span class='yellow-star'>★</span>`)
+            else appendLocation.append(`<span class='white-star'>☆</span>`)
+        }
+    }
 
 });

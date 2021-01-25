@@ -71,6 +71,16 @@ li img {
   width: 200px;
 }
 
+
+.yellow-star {
+  color: #FFD600;
+}
+
+.white-star {
+  color: #FFD600;
+  opacity: 0.4;
+}
+
 .rating {
   display: flex;
   flex-direction: row-reverse;

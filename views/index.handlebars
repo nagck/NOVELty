@@ -3,7 +3,7 @@
 <div class="dashboard-view">
     <h2> DASHBOARD - <span id="name-of-user"></span></h2>
 
-    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#exampleModalCenter" data-backdrop="static" data-search="current"  data-keyboard="false">Add a Book</button></h3>
+    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-backdrop="static" data-search="current"  data-keyboard="false">Add a Book</button></h3>
 
     <div class="col-md-8 col-lg-6" id="current-list" >
         <ul id="lightSlider-current">
@@ -19,7 +19,7 @@
         </ul>
     </div>
 
-    <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#exampleModalCenter" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
+    <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
 
     <div class="col-md-8 col-lg-6" id="past-list"  >
         <ul id="lightSlider-past">
@@ -51,11 +51,11 @@
 
 
 <!-- Modal for searching books -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modal-search" tabindex="-1" role="dialog" aria-labelledby="modal-search-title" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+        <h5 class="modal-title"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -89,11 +89,11 @@
 </div>
 
 <!-- Modal for rating books -->
-<div class="modal fade" id="modal-rating" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modal-rating" tabindex="-1" role="dialog" aria-labelledby="modal-rating-title" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Current Reading</h5>
+        <h5 class="modal-title">Rate the book</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -102,19 +102,23 @@
         <h3>Are you done?</h3>
         <form id="rating-form">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="finished" value="true" checked>
-              <label class="form-check-label"  for="flexRadioDefault1">
+              <input class="form-check-input" type="radio" name="done" id="finished" value="true" checked>
+              <label class="form-check-label"  for="finished">
                 Finished
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="dropped" value="false" >
-              <label class="form-check-label" for="flexRadioDefault2">
+              <input class="form-check-input" type="radio" name="done" id="dropped" value="false" >
+              <label class="form-check-label" for="dropped">
                 Dropped
               </label>
             </div>
             <div class="rating">
-            <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label> <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label> <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label> <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label> <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+              <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+              <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+              <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+              <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+              <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
             </div>
             <div class="form-group">
               <textarea class="form-control" aria-label="With textarea" required></textarea>
@@ -135,11 +139,11 @@
 </div>
 
 <!-- Modal for viewing book -->
-<div class="modal fade" id="modal-new-book" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modal-new-book" tabindex="-1" role="dialog" aria-labelledby="modal-new-book-title" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">New book</h5>
+        <h5 class="modal-title">Recommended for you</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -158,8 +162,11 @@
           <br>
         </div>
         <button class="btn btn-primary" id="add-book">Add to Reading list</button>
+        <div>
+          <h4>Reviews:</h4>
+        </div>
         <div id="book-review">
-
+          None available at the moment
         </div>
       <div class="modal-footer">
       </div>
