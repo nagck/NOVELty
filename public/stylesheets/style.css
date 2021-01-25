@@ -149,6 +149,20 @@ html {
   margin: auto;
 }
 
+li img {
+  height: 250px;
+  width: 200px;
+}
+
+
+.yellow-star {
+  color: #FFD600;
+}
+
+.white-star {
+  color: #FFD600;
+  opacity: 0.4;
+}
 
 .rating {
   display: flex;
@@ -167,6 +181,7 @@ html {
   color: #FFD600;
   cursor: pointer
 }
+
 
 .rating>label::before {
   content: "\2605";
