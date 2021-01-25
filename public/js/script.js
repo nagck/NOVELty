@@ -12,19 +12,20 @@ const searchByTitle = (title,cb) => {
         let bookList =[];
         let authorUnique = [];
         data.docs.forEach(book => {
+            console.log(book)
             if(book.author_name !== undefined) {
                 if(book.isbn !== undefined) {
                     if(book.title.toLowerCase() == title.toLowerCase()){
                         if(authorUnique.indexOf(book.author_name[0].toLowerCase().trim())==-1) {
-                            let isbn = book.isbn[0];
-                            if(book.id_alibris_id) isbn = book.id_alibris_id[0];
-                            else{
-                                for(let i = 0; i < book.isbn.length; i++){
-                                    if(book.isbn[i].startsWith('9780')) {
-                                        isbn = book.isbn[i];
-                                    }
-                                }
-                            }  
+                            let isbn = book.edition_key[0];
+                            // if(book.id_alibris_id) isbn = book.id_alibris_id[0];
+                            // else{
+                            //     for(let i = 0; i < book.isbn.length; i++){
+                            //         if(book.isbn[i].startsWith('9780')) {
+                            //             isbn = book.isbn[i];
+                            //         }
+                            //     }
+                            // }  
                             bookList.push({
                                 author: book.author_name,
                                 title: book.title,
@@ -49,22 +50,22 @@ const searchByAuthor = (author, cb) => {
     fetch(url+author)
     .then(response => response.json())
     .then(data => {
-        // console.log(data);
+        console.log(data);
         let bookList =[];
         let titleUnique = [];
         data.docs.forEach(book =>{
             if(book.author_name !== undefined) {
                 if(book.isbn !== undefined) {
                     if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
-                        let isbn = book.isbn[0];
-                            if(book.id_alibris_id) isbn = book.id_alibris_id[0];
-                            else{
-                                for(let i = 0; i < book.isbn.length; i++){
-                                    if(book.isbn[i].startsWith('9780')) {
-                                        isbn = book.isbn[i];
-                                    }
-                                }
-                            }  
+                        let isbn = book.edition_key[0];
+                        // if(book.id_alibris_id) isbn = book.id_alibris_id[0];
+                        // else{
+                        //     for(let i = 0; i < book.isbn.length; i++){
+                        //         if(book.isbn[i].startsWith('9780')) {
+                        //             isbn = book.isbn[i];
+                        //         }
+                        //     }
+                        // }  
                         console.log(book)
                         bookList.push({
                             author: book.author_name,
@@ -155,6 +156,37 @@ const getBookInfoAlternative = (ISBN, cb) =>{
     })
 }
 
+// get alternative book:
+const getBookInfoWorks = (ISBN, cb) =>{
+
+    let url = `https://openlibrary.org/api/books?bibkeys=OLID:${ISBN}&jscmd=details&format=json`
+    fetch(url)
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data)
+        let key = `OLID:${ISBN}`;
+        let book = data[key].details;
+        let authors = (book.authors) ? book.authors.map(author => author.name) : "None available";
+        let description = (book.description) ? book.description : "None available";;
+        if(typeof book.description == "object") description = book.description.value
+        let pageCount = (book.number_of_pages) ? book.number_of_pages : "None available"
+        let bookObj = {
+            author: authors,
+            description: description,
+            pageCount : pageCount,
+            title: book.title
+        }
+        console.log(bookObj);
+        fetch(`/api/books/review/${ISBN}`)
+        .then(response => response.json())
+        .then(review => {
+            console.log(review)
+            bookObj.reviews = review;
+            cb(bookObj);
+        })
+    })
+}
+
 
 // get the book cover url
 const checkBookCover = (ISBNarray, validISBN, cb) =>{
@@ -182,7 +214,8 @@ const checkBookCover = (ISBNarray, validISBN, cb) =>{
 
 // get the book cover url
 const getBookCover = (ISBN, cb) =>{
-    return `http://covers.openlibrary.org/b/isbn/${ISBN}-M.jpg?default=false`
+    // return `http://covers.openlibrary.org/b/isbn/${ISBN}-M.jpg?default=false`
+    return `http://covers.openlibrary.org/b/OLID/${ISBN}-M.jpg?default=false`
 }
 
 const shuffle =  (array) => {
@@ -200,7 +233,7 @@ const getRecommendation = (cb) =>{
     Promise.all([
         fetch(`/api/recommendationUser/`),
         fetch(`/api/recommendationTD/`), 
-        fetch(`/api/recommendationNY/hardcover-fiction`),
+        // fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
         // Get a JSON object from each of the responses
@@ -221,11 +254,11 @@ const getRecommendation = (cb) =>{
         .then(results =>{
             let existingBooks = results.map(book => book.Book.ISBN);
             let finalISBN = uniqueISBN.filter(el => existingBooks.indexOf(el) === -1);
-            
-            let validISBN = []
-            checkBookCover(finalISBN,validISBN,arr =>{
-                cb(shuffle(arr));
-            })            
+            cb(shuffle(finalISBN))
+            // let validISBN = []
+            // checkBookCover(finalISBN,validISBN,arr =>{
+            //     cb(shuffle(arr));
+            // })            
         })
 
         
