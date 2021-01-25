@@ -46,7 +46,7 @@ const recommendationNewYork = (genre, cb) =>{
     fetch(url)  
         .then(response => response.json())  
         .then(data => { 
-            console.log(data); 
+            // console.log(data); 
             cb(data)
         })
         .catch(error => {
@@ -223,7 +223,7 @@ module.exports = function(app) {
         })
     })
 
-    // add a book
+    // add a book to user
     app.post('/api/book/user',(req,res) =>{
         db.Readings.findOrCreate({
             where: {

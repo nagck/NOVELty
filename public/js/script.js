@@ -124,6 +124,24 @@ const getBookInfoAlternative = (ISBN, cb) =>{
     .then(response => response.json())
     .then(data =>{
         console.log(data)
+        let key = `ISBN:${ISBN}`;
+        let book = data[key].details;
+        let authors = book.authors.map(author => author.name);
+        let description = (book.description) ? book.description : "None availabe";
+        let bookObj = {
+            author: authors,
+            description: book.description,
+            pageCount : book.pagination,
+            title: book.title
+        }
+        console.log(bookObj);
+        fetch(`/api/books/review/${ISBN}`)
+        .then(response => response.json())
+        .then(review => {
+            console.log(review)
+            bookObj.reviews = review;
+            cb(bookObj);
+        })
     })
 }
 
@@ -146,8 +164,8 @@ const shuffle =  (array) => {
 const getRecommendation = (cb) =>{
     
     Promise.all([
-        fetch(`/api/recommendationUser/`),
-        fetch(`/api/recommendationTD/`), 
+        // fetch(`/api/recommendationUser/`),
+        // fetch(`/api/recommendationTD/`), 
         fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
@@ -183,9 +201,9 @@ const getRecommendation = (cb) =>{
     // isbn:
 //}
 //the returned data will be the book information
-const addBookToList = (bookObj,reading,user_id,cb) => {
+const addBookToList = (bookObj,reading,cb) => {
     // add book to database if not already exists
-    fetch(`/api/books`, {
+    fetch(`/api/book`, {
         method: 'POST',
         headers: {
             'content-type' : 'application/json',
@@ -206,7 +224,7 @@ const addBookToList = (bookObj,reading,user_id,cb) => {
             }
 
             // add book to user in the ReadingBooks table
-            fetch(`/api/books/${user_id}`,{
+            fetch(`/api/book/user`,{
                 method:'POST',
                 headers: {
                     'content-type' : 'application/json',
@@ -218,6 +236,7 @@ const addBookToList = (bookObj,reading,user_id,cb) => {
             .then(notExists=>{
                 cb(notExists, data);
             })
+            .catch(err => console.log(err))
         })
     })
 }
