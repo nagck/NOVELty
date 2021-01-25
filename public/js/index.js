@@ -1,9 +1,15 @@
 window.globals = {
-    gallery: ""
+    current: "",
+    past: ""
 };
 
 $(document).ready(function() {
     
+    fetch("/api/get_user").then(response => response.json())
+    .then(function(data) {
+      $("#name-of-user").text(data.name);
+    })
+
     let sliderCurrent = $("#lightSlider-current").lightSlider(
         {
         item:3,
@@ -14,10 +20,22 @@ $(document).ready(function() {
         responsive : []
     }); 
 
+    let sliderPast = $("#lightSlider-past").lightSlider(
+        {
+        item:3,
+        slideMove:1,
+        easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
+        speed:600,
+        enableDrag:false,
+        responsive : []
+    }); 
+
     window.globals = {
-        gallery: sliderCurrent
+        current: sliderCurrent,
+        past: sliderPast
     };
 
+    // get the recommed book via isbn
     getRecommendation(recommendationISBN =>{
         
         console.log(recommendationISBN)
@@ -44,6 +62,7 @@ $(document).ready(function() {
         $("#lightSlider-recommendation").removeClass('hide');
     });
 
+    // when you click on the recommended books it shows a modal
     $("#lightSlider-recommendation").click(e =>{
         e.preventDefault();
         e.stopPropagation();
@@ -69,6 +88,7 @@ $(document).ready(function() {
         }
     })
 
+    // when you click on the add book to list, it will add the book in the readings database
     $("#add-book").click(e =>{
         e.preventDefault();
         let bookObj = {
@@ -83,7 +103,7 @@ $(document).ready(function() {
 
                
                 $("#lightSlider-current").append($(`li img[data-isbn='${$("#modal-new-book").attr("data-isbn")}'`))
-                globals.gallery.refresh();
+                globals.current.refresh();
                 
             }
             
@@ -92,7 +112,7 @@ $(document).ready(function() {
 
     });
 
-
+    // when click on the books in your current list, it will show a modal to rate the book
     $("#lightSlider-current").click(e =>{
         e.preventDefault();
         e.stopPropagation();
@@ -103,7 +123,7 @@ $(document).ready(function() {
         }
     })
 
-    
+    // when you submit the form for the rating    
     $("#rating-form").submit((e)=>{
         e.preventDefault();
         e.stopPropagation();
@@ -123,7 +143,7 @@ $(document).ready(function() {
                         bookId: bookId
                     }
     
-                    fetch(`/api/books/`, {
+                    fetch(`/api/book/`, {
                         method : "PUT",
                         headers: {
                             "content-type": "application/json",
@@ -134,7 +154,8 @@ $(document).ready(function() {
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        $("#past-list").append($(`img[data-isbn='${$("#modal-rating").attr("data-isbn")}'`))
+                        $("#lightSlider-past").append($(`li img[data-isbn='${$("#modal-rating").attr("data-isbn")}'`));
+                        globals.past.refresh();
                         $("#modal-rating").attr("data-isbn", "");
                         $("#finished").prop('checked', true);        
                         $('input[name=rating]').attr('checked',false);                
@@ -175,5 +196,99 @@ $(document).ready(function() {
                 
             })
     });
+
+
+
+    var resultsList = $("#search-results")
+
+    var titleForm = $("form.title");
+    var titleInput = $("input#title-input");
+    titleForm.on("submit", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        let title = titleInput.val().trim();
+        console.log(title)
+        searchByTitle(title, result =>{
+            console.log(result);
+            resultsList.empty();
+            result.forEach(book =>{
+                
+                let li = $("<li></li>").text(`${book.title} by ${book.author.toString()}`);
+                li.attr("data-isbn", book.isbn);
+                li.addClass("list-group-item");
+                li.attr("data-title", book.title);
+                li.attr("data-author", book.author);
+                
+                resultsList.append(li);
+            })
+        });
+    });
+
+    var authorForm = $("form.author");
+    var authorInput = $("input#author-input");
+    authorForm.on("submit", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        let author = authorInput.val().trim();
+        console.log(author)
+        searchByAuthor(author, result =>{
+            console.log(result);
+            resultsList.empty();
+            result.forEach(book =>{
+                
+                let li = $("<li></li>").text(`${book.title} by ${book.author.toString()}`);
+                li.addClass("list-group-item")
+                li.attr("data-isbn", book.isbn);
+                li.attr("data-title", book.title);
+                li.attr("data-author", book.author);
+                
+                resultsList.append(li);
+            })
+        });
+  });
+
+  $('#exampleModalCenter').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget) // Button that triggered the modal
+    let type = button.data('search') // Extract info from data-* attributes
+    let modal = $(this)
+    modal.find('.modal-title').text('Add a book to your ' + type + ' reading list.') 
+    modal.attr('data-search', type)
+  })
+
+  resultsList.click((e)=>{
+      e.preventDefault();
+      if(e.target.matches("li")) {
+            let bookObj = JSON.parse(JSON.stringify(e.target.dataset));
+
+            console.log(bookObj); 
+
+            addBookToList(bookObj,false, (notExists, data)=>{
+                console.log(notExists)
+                console.log(data)
+                if(notExists[1]){
+                    
+
+                    let img = $("<img>").attr("src",data[0].URL);
+                    img.attr("data-isbn",data[0].ISBN);
+                    img.attr("atl",data[0].name);
+                    let li = $("<li>");
+                    li.append(img);
+                    if($('#exampleModalCenter').attr("data-search") === "current") {
+                        $("#lightSlider-current").append(li);
+                        globals.current.refresh();
+                    }
+                    else{
+                        $("#lightSlider-past").append(li);
+                        globals.past.refresh();
+                    }
+                }
+                titleInput.val("");
+                authorInput.val("")
+                resultsList.empty();
+                $("#exampleModalCenter").modal('hide');
+            })
+    }
+
+    })
 
 });
