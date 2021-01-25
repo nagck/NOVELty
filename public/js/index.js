@@ -41,7 +41,6 @@ $(document).ready(function() {
     // get the recommed book via isbn
     getRecommendation(recommendationISBN =>{
         
-        console.log(recommendationISBN)
         for(let i = 0; i <recommendationISBN.length; i++){
             let img = $("<img>").attr("src",getBookCover(recommendationISBN[i]));
             img.attr("data-isbn",recommendationISBN[i]);
@@ -72,9 +71,7 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
         if(e.target.matches("img")){
-            console.log($(e.target).attr("data-isbn"))
             getBookInfo($(e.target).attr("data-isbn"), data=>{
-                console.log($(e.target))
     
                 $("#modal-new-book").attr("data-isbn", $(e.target).attr("data-isbn"))
                 $("#book-cover").html(`<img src='${getBookCover($(e.target).attr("data-isbn"))}'>`)
@@ -84,11 +81,17 @@ $(document).ready(function() {
                 $("#book-description").text(data.description)
                 
                 $("#book-review").html("");
-                data.reviews.forEach(el =>{
-                    $("#book-review").append(`<p>Rating: ${el.rate}</p><p>${el.content}</p><p>-${el.User.name}</p>`)
-                })
-    
+                if(data.reviews.length == 0) $("#book-review").html("None available at the moment");
+                else{
+                    data.reviews.forEach(el =>{
+                        let stars = $("<p></p>");
+                        addStars(el.rate, stars)
+                        $("#book-review").append(stars)
+                        $("#book-review").append(`<p>${el.content}</p><p>-${el.User.name}</p>`)
+                    })
+                }
                 $("#modal-new-book").modal("show")
+
             })
         }
     })
@@ -129,11 +132,19 @@ $(document).ready(function() {
         }
     })
 
+
+    $('#modal-rating').on('hidden.bs.modal', function (event) {
+        $("#modal-rating").attr("data-isbn", "");
+        $("#finished").prop('checked', true);        
+        $('input[type="radio"][name="rating"]').prop('checked', false);               
+        $("textarea").val("");
+      })
+
     // when you submit the form for the rating    
     $("#rating-form").submit((e)=>{
         e.preventDefault();
         e.stopPropagation();
-        let finished = $("input[type='radio'][name='flexRadioDefault']:checked").val();
+        let finished = $("input[type='radio'][name='done']:checked").val();
         let rating = parseInt($("input[type='radio'][name='rating']:checked").val());
         let content = $("textarea").val();
         let isbn = $("#modal-rating").attr("data-isbn");
@@ -160,19 +171,9 @@ $(document).ready(function() {
                     })
                     .then(response => response.json())
                     .then(data => {
-                        
-                        console.log($("#modal-rating").attr("data-isbn"))
-                        console.log($(`li[data-id='${isbn}']`));
-
-                        // $("#lightSlider-past").append($(`li img[data-isbn='${isbn}']`));
                         $("#lightSlider-past").append($(`li[data-id='${isbn}']`));
-                        $("#modal-rating").attr("data-isbn", "");
-                        $("#finished").prop('checked', true);        
-                        $('input:radio[name="rating"]').attr('checked',false);                
-                        $("textarea").val("");
                         $("#modal-rating").modal("hide") 
                         globals.past.refresh();
-                        console.log('why is it not working anymore')
                     })
                 }
                 else{
@@ -181,13 +182,7 @@ $(document).ready(function() {
                     })
                     .then(response => response.json())
                     .then(data =>{
-                        console.log($("#modal-rating").attr("data-isbn"));
-                        // $(`li img[data-isbn='${isbn}']`).remove();
                         $(`li[data-id='${isbn}']`).remove();
-                        $("#modal-rating").attr("data-isbn", "");
-                        $("#finished").prop('checked', true);        
-                        $('input:radio[name="rating"]').attr('checked',false);                
-                        $("textarea").val("");
                         globals.current.refresh();
                         $("#modal-rating").modal("hide") 
                     })
@@ -197,7 +192,6 @@ $(document).ready(function() {
                     content: content,
                     rating: rating
                 }
-                console.log(reviewObj)
                 fetch(`/api/books/review/${bookId}`, {
                     method: "POST",
                     headers: {
@@ -222,9 +216,7 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         let title = titleInput.val().trim();
-        console.log(title)
         searchByTitle(title, result =>{
-            console.log(result);
             resultsList.empty();
             result.forEach(book =>{
                 
@@ -245,9 +237,7 @@ $(document).ready(function() {
         event.preventDefault();
         event.stopPropagation();
         let author = authorInput.val().trim();
-        console.log(author)
         searchByAuthor(author, result =>{
-            console.log(result);
             resultsList.empty();
             result.forEach(book =>{
                 
@@ -262,7 +252,7 @@ $(document).ready(function() {
         });
   });
 
-  $('#exampleModalCenter').on('show.bs.modal', function (event) {
+  $('#modal-search').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget) // Button that triggered the modal
     let type = button.data('search') // Extract info from data-* attributes
     let modal = $(this)
@@ -274,12 +264,9 @@ $(document).ready(function() {
       e.preventDefault();
       if(e.target.matches("li")) {
             let bookObj = JSON.parse(JSON.stringify(e.target.dataset));
-            let reading = ($('#exampleModalCenter').attr("data-search") === "current") ? true : false;
-            console.log(bookObj); 
-
+            let reading = ($('#modal-search').attr("data-search") === "current") ? true : false;
+            
             addBookToList(bookObj,reading, (notExists, data)=>{
-                console.log(notExists)
-                console.log(data)
                 if(notExists[1]){
                     
 
@@ -289,9 +276,7 @@ $(document).ready(function() {
                     let li = $("<li>");
                     li.attr("data-id",data[0].ISBN)
                     li.append(img);
-                    console.log(li)
-                    if($('#exampleModalCenter').attr("data-search") === "current") {
-                        console.log('it makes no sense')
+                    if($('#modal-search').attr("data-search") === "current") {
                         $("#lightSlider-current").append(li);
                         globals.current.refresh();
                     }
@@ -303,10 +288,17 @@ $(document).ready(function() {
                 titleInput.val("");
                 authorInput.val("")
                 resultsList.empty();
-                $("#exampleModalCenter").modal('hide');
+                $("#modal-search").modal('hide');
             })
     }
 
     })
+
+    const addStars = (num, appendLocation) =>{
+        for(let i = 0; i < 5; i++){
+            if(i < num) appendLocation.append(`<span class='yellow-star'>★</span>`)
+            else appendLocation.append(`<span class='white-star'>☆</span>`)
+        }
+    }
 
 });
