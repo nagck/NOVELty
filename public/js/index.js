@@ -40,9 +40,9 @@ $(document).ready(function() {
         
         console.log(recommendationISBN)
         for(let i = 0; i <recommendationISBN.length; i++){
-            
             let img = $("<img>").attr("src",getBookCover(recommendationISBN[i]));
             img.attr("data-isbn",recommendationISBN[i]);
+            img.attr("alt",`ISBN: ${recommendationISBN[i]}`);
             let li = $("<li>");
             li.append(img);
             $("#lightSlider-recommendation").append(li)
@@ -183,6 +183,7 @@ $(document).ready(function() {
                     content: content,
                     rating: rating
                 }
+                console.log(reviewObj)
                 fetch(`/api/books/review/${bookId}`, {
                     method: "POST",
                     headers: {
