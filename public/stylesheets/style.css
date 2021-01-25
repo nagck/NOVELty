@@ -89,6 +89,7 @@ li img {
   cursor: pointer
 }
 
+
 .rating>label::before {
   content: "\2605";
   position: absolute;

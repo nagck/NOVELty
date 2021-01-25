@@ -87,8 +87,9 @@ $(document).ready(function() {
                 data.reviews.forEach(el =>{
                     $("#book-review").append(`<p>Rating: ${el.rate}</p><p>${el.content}</p><p>-${el.User.name}</p>`)
                 })
-    
+                console.log(parseInt($("input[type='radio'][name='rating']:checked").val()))
                 $("#modal-new-book").modal("show")
+
             })
         }
     })
@@ -129,6 +130,15 @@ $(document).ready(function() {
         }
     })
 
+
+    $('#modal-rating').on('hidden.bs.modal', function (event) {
+        console.log($('input[type="radio"][name="rating"]'))
+        $("#modal-rating").attr("data-isbn", "");
+        $("#finished").prop('checked', true);        
+        $('input[type="radio"][name="rating"]').prop('checked', false);               
+        $("textarea").val("");
+      })
+
     // when you submit the form for the rating    
     $("#rating-form").submit((e)=>{
         e.preventDefault();
@@ -166,10 +176,6 @@ $(document).ready(function() {
 
                         // $("#lightSlider-past").append($(`li img[data-isbn='${isbn}']`));
                         $("#lightSlider-past").append($(`li[data-id='${isbn}']`));
-                        $("#modal-rating").attr("data-isbn", "");
-                        $("#finished").prop('checked', true);        
-                        $('input:radio[name="rating"]').attr('checked',false);                
-                        $("textarea").val("");
                         $("#modal-rating").modal("hide") 
                         globals.past.refresh();
                         console.log('why is it not working anymore')
@@ -184,10 +190,6 @@ $(document).ready(function() {
                         console.log($("#modal-rating").attr("data-isbn"));
                         // $(`li img[data-isbn='${isbn}']`).remove();
                         $(`li[data-id='${isbn}']`).remove();
-                        $("#modal-rating").attr("data-isbn", "");
-                        $("#finished").prop('checked', true);        
-                        $('input:radio[name="rating"]').attr('checked',false);                
-                        $("textarea").val("");
                         globals.current.refresh();
                         $("#modal-rating").modal("hide") 
                     })
