@@ -59,6 +59,7 @@ const recommendationNewYork = (genre, cb) =>{
 // it is a recursive function to find all the corresponding isbn
 const findISNB = (titles,isbnArray, cb) =>{
 
+    console.log(titles)
     if(titles.length == 0) cb(isbnArray);
     else{
         let title = titles.splice(0,1)[0];
@@ -70,18 +71,10 @@ const findISNB = (titles,isbnArray, cb) =>{
                 for(let i = 0; i < books.length; i++){
                     let book = books[i];
                     if(book.author_name !== undefined) {
-                        if(book.isbn !== undefined) {
-                            if(book.title.toLowerCase().trim() == title.toLowerCase().trim()){
-                                for(let i = 0; i < book.isbn.length; i++){
-                                    if(book.isbn[i].startsWith('9780')) {
-                                        isbn = book.isbn[i];
-                                        break;
-                                    }
-                                }
-                                isbnArray.push(isbn);
-                                break;
-                            }
-                        } 
+                        // let works = book.key;
+                        console.log(book.edition_key)
+                        isbnArray.push(book.edition_key[0])
+                        break;
                     }
                 }
                 findISNB(titles,isbnArray, cb);            
@@ -89,6 +82,30 @@ const findISNB = (titles,isbnArray, cb) =>{
             .catch(err=> {
                 console.log(err)
                 findISNB(titles,isbnArray, cb);  
+            })     
+        
+    }
+    
+}
+
+const convertISBN = (ISBNArray,WorkArray, cb) =>{
+
+    if(ISBNArray.length == 0) cb(WorkArray);
+    else{
+        let ISBN = ISBNArray.splice(0,1)[0];
+        let url = `https://openlibrary.org/isbn/${ISBN}.json`;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data)
+                let key = data.key.split("/")[2];
+                // console.log(key)
+                WorkArray.push(key)
+                convertISBN(ISBNArray,WorkArray, cb);            
+            })
+            .catch(err=> {
+                console.log(err)
+                convertISBN(ISBNArray,WorkArray, cb);  
             })     
         
     }
@@ -123,7 +140,6 @@ module.exports = function(app) {
             password: req.body.password
         })
         .then(() => {
-            // res.redirect(307, "/newuser");
             res.redirect(307, "/api/login")
         })
         .catch((err) => {
@@ -131,18 +147,6 @@ module.exports = function(app) {
         });
     });
 
-    // newuser - would need to see how to include 'genre' in user model
-    app.post('/api/newuser', (req,res)=>{
-        //TODO update field for 'genre'
-        // db.Users.update
-        // .then(function() {
-        //     res.redirect(307, '/api/login');
-        // })
-        // .catch((err) => {
-        //     res.status(401).json(err);
-        // });
-    })
-    
     // logout 
     app.get("/logout", function(req, res) {
         req.logout();
@@ -220,7 +224,8 @@ module.exports = function(app) {
             defaults: {
                 name: req.body.title,
                 author: req.body.author,
-                URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg?default=false`
+                // URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg?default=false`
+                URL: `http://covers.openlibrary.org/b/OLID/${req.body.isbn}-M.jpg?default=false`
             }
         })
         .then(() =>{
@@ -245,8 +250,6 @@ module.exports = function(app) {
             }
         })
         .then((data) =>{
-            console.log('adding book to user')
-            console.log(data)
             res.json(data)
         })
         .catch(err => res.status(401).json(err))
@@ -403,7 +406,13 @@ module.exports = function(app) {
                 let isbnArray = data.results.map(result => {
                     return result.isbns[0].isbn13;
                 })
-                res.json(isbnArray)
+                // console.log(isbnArray)
+                let workArray = [];
+
+                convertISBN(isbnArray, workArray, cb =>{
+                    res.json(cb)
+                })
+                
             }
         })
     })

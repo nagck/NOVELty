@@ -71,7 +71,7 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
         if(e.target.matches("img")){
-            getBookInfo($(e.target).attr("data-isbn"), data=>{
+            getBookInfoWorks($(e.target).attr("data-isbn"), data=>{
     
                 $("#modal-new-book").attr("data-isbn", $(e.target).attr("data-isbn"))
                 $("#book-cover").html(`<img src='${getBookCover($(e.target).attr("data-isbn"))}'>`)
