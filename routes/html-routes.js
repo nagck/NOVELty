@@ -40,12 +40,22 @@ module.exports = function(app) {
     db.Readings.findAll({
       where: {
         UserID: req.user.id
-      }
+      },
+      include:[db.Books]
     })
     .then(results =>{
       console.log('logging in')
-      console.log(results)
-      res.render('index', {whichPartial: function() {
+      let books = results.map(el =>{
+
+        return {
+          ISBN : el.Book.dataValues.ISBN,
+          URL : el.Book.dataValues.URL,
+          title : el.Book.dataValues.name,
+          reading : el.reading
+        }
+      })
+      console.log(books)
+      res.render('index', {books: books, whichPartial: function() {
         return "header/no-header";
       }});
     })
@@ -53,6 +63,7 @@ module.exports = function(app) {
   });
 
   app.get('/community',isAuthenticated, (req,res)=>{
+
     res.render('community', {whichPartial: function() {
       return "header/header-community";
     }});
