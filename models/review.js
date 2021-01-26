@@ -1,3 +1,5 @@
+
+// Creating Reviews model
 module.exports = (sequelize, DataTypes) => {
     const Reviews = sequelize.define('Reviews', {
       content: {
