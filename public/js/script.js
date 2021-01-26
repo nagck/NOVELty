@@ -320,13 +320,13 @@ const addBookToList = (bookObj,reading,cb) => {
     })
 }
 
-module.exports = { 
-    searchByTitle, 
-    searchByAuthor, 
-    getBookInfo, 
-    getBookCover, 
-    getRecommendation, 
-    addBookToList, 
-}
+// module.exports = { 
+//     searchByTitle, 
+//     searchByAuthor, 
+//     getBookInfo, 
+//     getBookCover, 
+//     getRecommendation, 
+//     addBookToList, 
+// }
 
 
