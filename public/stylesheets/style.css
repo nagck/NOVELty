@@ -104,12 +104,13 @@ html {
 }
 
 .btn-primary {
-  width: 8rem;
+  min-width: 8rem;
   border: 2px solid #D55A5B;
   background-color: #fff;
   color: #D55A5B;
   font-weight: bold;
   margin: 1rem;
+}
 /* ======= */
 /* form.login, form.signup {
   top: 0;
