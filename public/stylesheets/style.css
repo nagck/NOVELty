@@ -182,6 +182,31 @@ li img {
   justify-content: center
 }
 
+.nav-link  {
+  color: #D55A5B !important;
+  border-bottom: none !important;
+}
+
+.nav-link:hover  {
+  color: #fff !important;
+  border-bottom: none !important;
+  background-color: grey;
+}
+
+.nav-link.disabled {
+  color: grey !important;
+}
+
+.nav-link.active {
+  color: #fff !important;
+  background-color: #D55A5B !important;
+  cursor: default;
+}
+
+.dashboard-view{
+  border-top: 3px solid #D55A5B;
+}
+
 .rating>input {
   display: none
 }
