@@ -12,8 +12,6 @@ const Op = Sequelize.Op;
 const recommendationTasteDiveArray = (titles, cb) =>{
     let book = `${titles.splice(0,1)}`;
     let apikey = process.env.MYAPIKEY_TD;
-    console.log('testing tastedive');
-    console.log(book)
     if(book.trim() === "") {
         cb(false);
     }
@@ -25,7 +23,6 @@ const recommendationTasteDiveArray = (titles, cb) =>{
             },
             (error, response, body) => {
                 if (error || response.statusCode !== 200) {
-                    console.error(error)
                     recommendationTasteDiveArray(titles,cb);
                 }
                 else if (JSON.parse(body).Similar.Results.length == 0){
@@ -46,13 +43,8 @@ const recommendationNewYork = (genre, cb) =>{
     let url = `https://api.nytimes.com/svc/books/v3/lists.json?list=${genre}&api-key=${apikey}`;
     fetch(url)  
         .then(response => response.json())  
-        .then(data => { 
-            // console.log(data); 
-            cb(data)
-        })
-        .catch(error => {
-            cb(false)
-        });
+        .then(data => cb(data))
+        .catch(err => cb(false));
 }
 
 // function to get the list of titles and the array to store the isbn
@@ -95,9 +87,7 @@ const convertISBN = (ISBNArray,WorkArray, cb) =>{
             fetch(url)
             .then(response => response.json())
             .then(data => {
-                // console.log(data)
                 let key = data.key.split("/")[2];
-                // console.log(key)
                 WorkArray.push(key)
                 convertISBN(ISBNArray,WorkArray, cb);            
             })
@@ -180,7 +170,6 @@ module.exports = function(app) {
         if (!req.user) {
             res.json({});
         } 
-        
         else {
             res.json({
               name: req.user.name,
@@ -225,8 +214,6 @@ module.exports = function(app) {
 
     // delete a book
     app.delete('/api/book/:book',(req,res) =>{
-        // TODO: function to destroy a book when the user drops it
-        // probably using the req.body to get the parameters
         db.Readings.destroy({
             where:{
                 UserId: req.user.id,
@@ -246,7 +233,6 @@ module.exports = function(app) {
             defaults: {
                 name: req.body.title,
                 author: req.body.author,
-                // URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg?default=false`
                 URL: `http://covers.openlibrary.org/b/OLID/${req.body.isbn}-M.jpg?default=false`
             }
         })
@@ -254,7 +240,6 @@ module.exports = function(app) {
             res.status(307).json({})
         })
         .catch(err => {
-            // console.log(err)
             res.status(401).json({err})
         })
     })
@@ -286,6 +271,7 @@ module.exports = function(app) {
             }
         })
         .then(result => res.json(result))
+        .catch(err => console.log(err))
     })
 
 
@@ -315,21 +301,22 @@ module.exports = function(app) {
     app.get('/api/books/review/:isbn', (req,res)=>{
         
         db.Reviews.findAll({
-            include: [{
-                model: db.Books, 
-                where: {
-                    ISBN: req.params.isbn
+            include: [
+                {
+                    model: db.Books, 
+                    where: {
+                        ISBN: req.params.isbn
+                    },
                 },
-            },
-            {model: db.Users}
-        ]
-        }).then(result => res.json(result))
+                {model: db.Users}
+            ]   
+        })
+        .then(result => res.json(result))
+        .catch(err => console.log(err))
         
     })
 
-    
     // recommendation function 
-    
     app.get('/api/recommendationUser/',(req,res) =>{
         db.Readings.findAll({
             where:{
