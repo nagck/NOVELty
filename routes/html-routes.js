@@ -46,7 +46,7 @@ module.exports = function(app) {
     .then(results =>{
       console.log('logging in')
       let books = results.map(el =>{
-
+        console.log(el)
         return {
           ISBN : el.Book.dataValues.ISBN,
           URL : el.Book.dataValues.URL,
@@ -64,9 +64,30 @@ module.exports = function(app) {
 
   app.get('/community',isAuthenticated, (req,res)=>{
 
-    res.render('community', {whichPartial: function() {
-      return "header/header-community";
-    }});
+      db.Reviews.findAll({
+          include: [db.Users, db.Books],
+          order: [["createdAt", "DESC"]],
+          limit: 5
+      }).then(results => {
+        let reviews = results.map(el =>{
+          console.log(el)
+          return {
+            time : el.dataValues.createdAt,
+            content : el.dataValues.content,
+            rate : el.dataValues.rate,
+            username : el.dataValues.User.name,
+            url : el.dataValues.Book.URL,
+            title: el.dataValues.Book.name
+          }
+        })
+        console.log(reviews)
+        res.render('community', {reviews: reviews, whichPartial: function() {
+          return "header/header-community";
+        }});
+      })
+      .catch(err => console.log(err))
+
+    
   });
 
   // Do we need a profile page so that they can change their password?

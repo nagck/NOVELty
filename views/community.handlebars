@@ -1,11 +1,37 @@
 <div id="demo" class="carousel slide" data-ride="carousel">
       <!-- Indicators -->
       <ul class="carousel-indicators">
-        <li data-target="#demo" data-slide-to="0" class="active"></li>
-        <li data-target="#demo" data-slide-to="1"></li>
-        <li data-target="#demo" data-slide-to="2"></li>
+        {{#each reviews}}
+        {{#unless @index}}<li data-target="#demo" data-slide-to="{{@index}}" class="active"></li>{{/unless}}
+        {{#if @index}}<li data-target="#demo" data-slide-to="{{@index}}"></li>{{/if}}
+        
+        {{/each}}
       </ul>
 
+<<<<<<< HEAD
+      <div class="carousel-inner">
+      {{#each reviews}}
+=======
+>>>>>>> 5a7377e8f64b8bd0460f74ae0dbc55646e865885
+
+      {{#unless @index}}<div class="carousel-item active bg-warning">{{/unless}}
+      {{#if @index}}<div class="carousel-item bg-warning">{{/if}}
+          <img src="{{this.url}}" alt="{{this.title}}">
+          <div class="carousel-caption text-dark">
+            <h3>{{this.title}}</h3>
+            <div>Ratings: {{this.rate}}</div>
+            <p>
+              {{this.content}}
+            </p>
+            <p>
+              {{this.username}} at {{this.time}}
+            </p>
+          </div>
+        </div>
+      {{/each}}
+      
+      </div>
+{{!-- 
       <!-- The slideshow -->
       <div class="carousel-inner">
         <div class="carousel-item active bg-warning">
@@ -43,7 +69,7 @@
             <p>Book reviews help readers to choose a new book to read!</p>
           </div>
         </div>
-      </div>
+      </div> --}}
 
       <!-- Left and right controls -->
       <a class="carousel-control-prev" href="#demo" data-slide="prev">

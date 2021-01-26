@@ -72,8 +72,7 @@ const findISNB = (titles,isbnArray, cb) =>{
                     let book = books[i];
                     if(book.author_name !== undefined) {
                         // let works = book.key;
-                        console.log(book.edition_key)
-                        isbnArray.push(book.edition_key[0])
+                        isbnArray.push(book.cover_edition_key)
                         break;
                     }
                 }
@@ -82,8 +81,7 @@ const findISNB = (titles,isbnArray, cb) =>{
             .catch(err=> {
                 console.log(err)
                 findISNB(titles,isbnArray, cb);  
-            })     
-        
+            })   
     }
     
 }
@@ -107,9 +105,33 @@ const convertISBN = (ISBNArray,WorkArray, cb) =>{
                 console.log(err)
                 convertISBN(ISBNArray,WorkArray, cb);  
             })     
-        
     }
+}
+
+const getBookInfoGoogle = (ISBN, title, cb) => {
     
+    let url = `https://www.googleapis.com/books/v1/volumes?q=${ISBN}`;
+    
+    fetch(url)
+    .then(response =>response.json())
+    .then(data =>{
+        let book = data.items[0].volumeInfo;
+
+        let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
+        if (!correctBook) {
+            console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
+            cb(false);
+        } 
+        else{
+            let bookObj = {
+                author: book.authors,
+                description: book.description,
+                pageCount : book.pageCount,
+                title: book.title
+            }
+            cb(bookObj)
+        }
+    })
 }
 
 // helper function to shuffle arrays
@@ -367,6 +389,7 @@ module.exports = function(app) {
         next();
     });
 
+
     app.get('/api/recommendationTD/',(req,res) =>{
         db.Readings.findAll({
             where:{
@@ -406,7 +429,7 @@ module.exports = function(app) {
                 let isbnArray = data.results.map(result => {
                     return result.isbns[0].isbn13;
                 })
-                // console.log(isbnArray)
+                console.log(isbnArray)
                 let workArray = [];
 
                 convertISBN(isbnArray, workArray, cb =>{
@@ -414,6 +437,137 @@ module.exports = function(app) {
                 })
                 
             }
+        })
+    })
+
+    // api routes to get all titles from openlibrary api with unique authors
+    app.get('/api/search/title/:title',(req,res) =>{
+        
+        let title = req.params.title;
+        const url = "http://openlibrary.org/search.json?title=" + title;
+        request(
+            { 
+                url: url 
+            },
+            (error, response, body) => {
+                if (error || response.statusCode !== 200) {
+                    console.error(error)
+                }
+                else{
+                    let data = JSON.parse(body);
+
+                    let bookList =[];
+                    let authorUnique = [];
+                    data.docs.forEach(book => {
+                        if(book.author_name !== undefined) {
+                            if(book.isbn !== undefined) {
+                                if(book.title.toLowerCase() == title.toLowerCase()){
+                                    if(authorUnique.indexOf(book.author_name[0].toLowerCase().trim())==-1) {
+                                        let isbn = book.cover_edition_key;
+                                        bookList.push({
+                                            author: book.author_name,
+                                            title: book.title,
+                                            isbn: isbn
+                                        });
+                                    }
+                                    authorUnique.push(book.author_name[0].toLowerCase().trim());
+                                    
+                                }
+                            } 
+                        }
+                    })
+                    let final = bookList.slice(0,Math.min(10, bookList.length));
+                    res.json(final)   
+                    
+                }  
+            } 
+        )
+    });
+
+    // api routes to get all titles from openlibrary api with unique authors
+    app.get('/api/search/author/:author',(req,res) =>{
+        
+        let author = req.params.author;
+        const url = "http://openlibrary.org/search.json?author=" + author;
+        request(
+            { 
+                url: url 
+            },
+            (error, response, body) => {
+                if (error || response.statusCode !== 200) {
+                    console.error(error)
+                }
+                else{
+                    let data = JSON.parse(body);
+
+                    let bookList =[];
+                    let titleUnique = [];
+                    data.docs.forEach(book => {
+                        if(book.author_name !== undefined) {
+                            if(book.isbn !== undefined) {
+                                if(book.author_name[0].toLowerCase() == author.toLowerCase()){
+                                    if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
+                                        let isbn = book.cover_edition_key;
+                                        bookList.push({
+                                            author: book.author_name,
+                                            title: book.title,
+                                            isbn: isbn
+                                        });
+                                    }
+                                    titleUnique.push(book.title.toLowerCase().trim());
+                                    
+                                }
+                            } 
+                        }
+                    })
+                    let final = bookList.slice(0,Math.min(10, bookList.length));
+                    res.json(final)   
+                }  
+            } 
+        )
+    })
+
+
+    app.get('/api/bookInfo/:isbn',(req,res) =>{
+        let ISBN = req.params.isbn;
+        let url = `https://openlibrary.org/api/books?bibkeys=OLID:${ISBN}&jscmd=details&format=json`
+        fetch(url)
+        .then(response => response.json())
+        .then(data =>{
+            console.log(data)
+            let key = `OLID:${ISBN}`;
+            let book = data[key].details;
+            let bookObj = {};
+
+            db.Reviews.findAll({
+                include: [{
+                    model: db.Books, 
+                    where: {
+                        ISBN: req.params.isbn
+                    },
+                },
+                {model: db.Users}
+            ]
+            }).then(review => {
+                getBookInfoGoogle(book.isbn_13[0],book.title, result =>{
+                    console.log(result)
+                    if(result) {
+                        bookObj = {... result, reviews: review};
+                    }
+                    else{
+                        bookObj["author"] = (book.authors) ? book.authors.map(author => author.name) : "None available";
+                        let description = (book.description) ? book.description : "None available";;
+                        if(typeof book.description == "object") description = book.description.value
+                        bookObj["pageCount"] = (book.number_of_pages) ? book.number_of_pages : "None available";
+                        bookObj["title"] = book.title;
+                        bookObj["description"] = description;
+                        bookObj["reviews"] = review;
+                        console.log(bookObj)
+                    }
+                    res.json(bookObj);
+                })
+            })
+            
         })
     })
 }

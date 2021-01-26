@@ -30,8 +30,9 @@
 
             {{#each books}}
             {{#if this.reading}}
+
             <li class="p-4" data-id={{this.ISBN}}>
-                <img src="{{this.URL}}" data-isbn={{this.ISBN}} alt="{{this.name}}">
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
             </li>
             {{/if}}
             {{/each}}
@@ -51,8 +52,13 @@
 
             {{#each books}}
             {{#unless this.reading}}
+<<<<<<< HEAD
             <li class="p-4"  data-id={{this.ISBN}}>
                 <img src="{{this.URL}}" data-isbn={{this.ISBN}} alt="{{this.name}}">
+=======
+            <li data-id={{this.ISBN}}>
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
+>>>>>>> ae9779c452565466349cc8e4c19848cd7040e6ae
             </li>
             {{/unless}}
             {{/each}}
