@@ -144,8 +144,8 @@ const getRecommendation = (cb) =>{
     
     Promise.all([
         fetch(`/api/recommendationUser/`),
-        // fetch(`/api/recommendationTD/`), 
-        // fetch(`/api/recommendationNY/hardcover-fiction`),
+        fetch(`/api/recommendationTD/`), 
+        fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
         // Get a JSON object from each of the responses
