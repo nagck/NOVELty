@@ -1,30 +1,30 @@
 {{!-- This is the content of the {{body}} tag in our main layout --}}
-<div class="col-md-9"><h2 class="text-primary"> Welcome back <span id="name-of-user"></span></h2></div>
+<div class="col-md-8"><h2 class="text-primary"> Welcome back <span id="name-of-user"></span></h2></div>
 
 <div class="row d-flex justify-content-center">
 <div class="col-md-12 col-lg-8 card">
 
   <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" href="#">Current Books</a>
+    <a class="nav-link active" id='current-link'>Current Books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Past books</a>
+    <a class="nav-link" id='past-link'>Past books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Recommended for you</a>
+    <a class="nav-link" id='recommended-link'>Recommended for you</a>
   </li>
   {{!-- <li class="nav-item">
     <a class="nav-link disabled" href="#">Disabled</a>
   </li> --}}
   </ul>
 
-<div class="p-0 m-0 dashboard-view">
+  <div class="p-0 m-0 dashboard-view" id='current-div'>
 
 
     <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
 
-    <div class="col-md-8 col-lg-6" id="current-list" >
+    <div class="" id="current-list" >
         <ul id="lightSlider-current">
 
             {{#each books}}
@@ -38,42 +38,52 @@
         
         </ul>
     </div>
+
+  
+
     </div>
-</div>
-</div>
+
+    <div class="p-0 m-0 dashboard-view hide" id='past-div'>
 
 
-    <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
-<div class="container">
-    <div class="row d-flex justify-content-center">
-    <div class="col-md-12 col-lg-10" id="past-list"  >
-        <ul class="mx-auto text-center"  id="lightSlider-past">
+     <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
+    <div class="" id="past-list" >
+        <ul id="lightSlider-past">
 
             {{#each books}}
             {{#unless this.reading}}
             <li data-id={{this.ISBN}}>
                 <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
+
             </li>
             {{/unless}}
             {{/each}}
         
         </ul>
     </div>
-    </div>
+
+  
+
     </div>
 
-    <h2>Recommended titles for you:</h2>
+    <div class="p-0 m-0 dashboard-view hide" id="recommended-div">
 
-    <div id="recommendation-placeholder">
+
+    <h3>Recommended titles for you:</h3>
+
+<div id="recommendation-placeholder">
         <div class="loader"></div>
     </div>
-
-    <div class="col-md-8 col-lg-6">
+    <div class="">
         <ul id="lightSlider-recommendation" class="hide">
         
         </ul>
     </div>
 
+  
+
+    </div>
+</div>
 </div>
 
 

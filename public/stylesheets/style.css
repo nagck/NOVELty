@@ -258,3 +258,8 @@ li img {
 .pointer {
   cursor: pointer;
 }
+
+.lslide {
+  background-color: #dbcad5;
+  text-align: center;
+}
