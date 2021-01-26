@@ -24,6 +24,8 @@
 </head>
 
 
+<body class="container-fluid p-0 m-0 h-100">
+  <div class="bg-image h-100 w-100 p-0 m-0">
 <body>
   <header class="site-header">
     <div class="row"> 
@@ -43,7 +45,18 @@
   {{{body}}}
 
 
+          {{!-- This will render a dynamic div depending on whether the user has logged in or not --}}
+          {{> (whichPartial) }}
+    
+    <div>
 
+      {{{body}}}
+
+    </div>
+        
+
+
+  </div>
 </body>
 
 </html>
