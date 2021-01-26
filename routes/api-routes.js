@@ -117,7 +117,7 @@ const getBookInfoGoogle = (ISBN, title, cb) => {
     .then(data =>{
         let book = data.items[0].volumeInfo;
 
-        let correctBook = title.toLowerCase().trim() === book.title.toLowerCase().trim();
+        let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
         if (!correctBook) {
             console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
             cb(false);
@@ -429,7 +429,7 @@ module.exports = function(app) {
                 let isbnArray = data.results.map(result => {
                     return result.isbns[0].isbn13;
                 })
-                // console.log(isbnArray)
+                console.log(isbnArray)
                 let workArray = [];
 
                 convertISBN(isbnArray, workArray, cb =>{
@@ -550,16 +550,19 @@ module.exports = function(app) {
             ]
             }).then(review => {
                 getBookInfoGoogle(book.isbn_13[0],book.title, result =>{
+                    console.log(result)
                     if(result) {
                         bookObj = {... result, reviews: review};
                     }
                     else{
-                        bookObj[author] = (book.authors) ? book.authors.map(author => author.name) : "None available";
+                        bookObj["author"] = (book.authors) ? book.authors.map(author => author.name) : "None available";
                         let description = (book.description) ? book.description : "None available";;
                         if(typeof book.description == "object") description = book.description.value
-                        bookObj[pageCount] = (book.number_of_pages) ? book.number_of_pages : "None available";
-                        bookObj[title] = book.title;
-                        bookObj[description] = description
+                        bookObj["pageCount"] = (book.number_of_pages) ? book.number_of_pages : "None available";
+                        bookObj["title"] = book.title;
+                        bookObj["description"] = description;
+                        bookObj["reviews"] = review;
+                        console.log(bookObj)
                     }
                     res.json(bookObj);
                 })

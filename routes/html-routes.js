@@ -64,7 +64,7 @@ module.exports = function(app) {
 
   app.get('/community',isAuthenticated, (req,res)=>{
 
-    res.render('community', {whichPartial: function() {
+    res.render('community', {reviews: reviews, whichPartial: function() {
       return "header/header-community";
     }});
   });
