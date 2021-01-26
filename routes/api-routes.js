@@ -460,7 +460,7 @@ module.exports = function(app) {
                     let authorUnique = [];
                     data.docs.forEach(book => {
                         if(book.author_name !== undefined) {
-                            if(book.isbn !== undefined) {
+                            if(book.cover_edition_key !== undefined) {
                                 if(book.title.toLowerCase() == title.toLowerCase()){
                                     if(authorUnique.indexOf(book.author_name[0].toLowerCase().trim())==-1) {
                                         let isbn = book.cover_edition_key;
@@ -504,7 +504,7 @@ module.exports = function(app) {
                     let titleUnique = [];
                     data.docs.forEach(book => {
                         if(book.author_name !== undefined) {
-                            if(book.isbn !== undefined) {
+                            if(book.cover_edition_key !== undefined) {
                                 if(book.author_name[0].toLowerCase() == author.toLowerCase()){
                                     if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
                                         let isbn = book.cover_edition_key;
@@ -548,11 +548,22 @@ module.exports = function(app) {
                 },
                 {model: db.Users}
             ]
-            }).then(review => {
-                getBookInfoGoogle(book.isbn_13[0],book.title, result =>{
+            }).then(reviews => {
+
+                let review = reviews.map(el =>{
+                    return {
+                        content: el.dataValues.content,
+                        rate: el.dataValues.rate,
+                        name: el.dataValues.User.name
+                    }
+                })
+                console.log(review)
+                let isbn = (book.isbn_13) ? book.isbn_13[0] : book.isbn_10[0]
+                getBookInfoGoogle(book.isbn,book.title, result =>{
                     console.log(result)
                     if(result) {
                         bookObj = {... result, reviews: review};
+                        console.log(bookObj)
                     }
                     else{
                         bookObj["author"] = (book.authors) ? book.authors.map(author => author.name) : "None available";
@@ -567,6 +578,7 @@ module.exports = function(app) {
                     res.json(bookObj);
                 })
             })
+            .catch(err => console.log(err))
             
         })
     })

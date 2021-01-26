@@ -83,11 +83,14 @@ $(document).ready(function() {
                 $("#book-review").html("");
                 if(data.reviews.length == 0) $("#book-review").html("None available at the moment");
                 else{
+                    console.log('testing')
+                    console.log(data.reviews)
                     data.reviews.forEach(el =>{
+                        console.log(el)
                         let stars = $("<p></p>");
                         addStars(el.rate, stars)
                         $("#book-review").append(stars)
-                        $("#book-review").append(`<p>${el.content}</p><p>-${el.User.name}</p>`)
+                        $("#book-review").append(`<p>${el.content}</p><p>-${el.name}</p>`)
                     })
                 }
                 $("#modal-new-book").modal("show")
