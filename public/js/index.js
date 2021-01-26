@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
     window.globals = {
         current: "",
