@@ -21,18 +21,17 @@
 
 <div class="p-0 m-0 dashboard-view">
 
-    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-backdrop="static" data-search="current"  data-keyboard="false">Add a Book</button></h3>
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-      
-    <div class="col-md-12 col-lg-10" id="current-list" >
-        <ulid="lightSlider-current">
+
+    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
+
+    <div class="col-md-8 col-lg-6" id="current-list" >
+        <ul id="lightSlider-current">
 
             {{#each books}}
             {{#if this.reading}}
+            <li data-id={{this.ISBN}}>
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}"  class="pointer">
 
-            <li class="p-4" data-id={{this.ISBN}}>
-                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
             </li>
             {{/if}}
             {{/each}}
@@ -92,7 +91,7 @@
         <h3>Search by Title</h3>
         <form class="title">
             <div class="form-group">
-            <input type="title" class="form-control" id="title-input" placeholder="Title">
+            <input type="title" class="form-control" id="title-input" placeholder="Title" required>
             </div>
             <button type="submit" class="btn btn-primary">Search Title</button>
         </form>
@@ -100,7 +99,7 @@
         <h3>Search by Author</h3>
         <form class="author">
             <div class="form-group">
-            <input type="author" class="form-control" id="author-input" placeholder="Author">
+            <input type="author" class="form-control" id="author-input" placeholder="Author" required>
             </div>
             <button type="submit" class="btn btn-primary">Search Author</button>
         </form>
@@ -179,7 +178,7 @@
       <div class="modal-body">
         <div id="book-cover">
         </div>
-        <div>
+        <div style="max-height: 200px; overflow-y: auto;">
           Title: <span id='book-title'></span>
           <br>
           Author: <span id='book-author'></span>
@@ -193,7 +192,7 @@
         <div>
           <h4>Reviews:</h4>
         </div>
-        <div id="book-review">
+        <div id="book-review" style="max-height: 100px; overflow-y: auto;">
           None available at the moment
         </div>
       <div class="modal-footer">

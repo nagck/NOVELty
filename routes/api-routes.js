@@ -12,8 +12,6 @@ const Op = Sequelize.Op;
 const recommendationTasteDiveArray = (titles, cb) =>{
     let book = `${titles.splice(0,1)}`;
     let apikey = process.env.MYAPIKEY_TD;
-    console.log('testing tastedive');
-    console.log(book)
     if(book.trim() === "") {
         cb(false);
     }
@@ -25,7 +23,6 @@ const recommendationTasteDiveArray = (titles, cb) =>{
             },
             (error, response, body) => {
                 if (error || response.statusCode !== 200) {
-                    console.error(error)
                     recommendationTasteDiveArray(titles,cb);
                 }
                 else if (JSON.parse(body).Similar.Results.length == 0){
@@ -46,20 +43,14 @@ const recommendationNewYork = (genre, cb) =>{
     let url = `https://api.nytimes.com/svc/books/v3/lists.json?list=${genre}&api-key=${apikey}`;
     fetch(url)  
         .then(response => response.json())  
-        .then(data => { 
-            // console.log(data); 
-            cb(data)
-        })
-        .catch(error => {
-            cb(false)
-        });
+        .then(data => cb(data))
+        .catch(err => cb(false));
 }
 
 // function to get the list of titles and the array to store the isbn
 // it is a recursive function to find all the corresponding isbn
 const findISNB = (titles,isbnArray, cb) =>{
 
-    console.log(titles)
     if(titles.length == 0) cb(isbnArray);
     else{
         let title = titles.splice(0,1)[0];
@@ -86,6 +77,7 @@ const findISNB = (titles,isbnArray, cb) =>{
     
 }
 
+// convert isbn to open library id
 const convertISBN = (ISBNArray,WorkArray, cb) =>{
 
     if(ISBNArray.length == 0) cb(WorkArray);
@@ -95,9 +87,7 @@ const convertISBN = (ISBNArray,WorkArray, cb) =>{
             fetch(url)
             .then(response => response.json())
             .then(data => {
-                // console.log(data)
                 let key = data.key.split("/")[2];
-                // console.log(key)
                 WorkArray.push(key)
                 convertISBN(ISBNArray,WorkArray, cb);            
             })
@@ -108,6 +98,8 @@ const convertISBN = (ISBNArray,WorkArray, cb) =>{
     }
 }
 
+// function that takes a isbn, book title and a callback function
+// it will search using the google api for the book information
 const getBookInfoGoogle = (ISBN, title, cb) => {
     
     let url = `https://www.googleapis.com/books/v1/volumes?q=${ISBN}`;
@@ -115,22 +107,20 @@ const getBookInfoGoogle = (ISBN, title, cb) => {
     fetch(url)
     .then(response =>response.json())
     .then(data =>{
-        let book = data.items[0].volumeInfo;
-
-        let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
-        if (!correctBook) {
-            console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
-            cb(false);
+        let bookObj = {}
+        for(let i = 0; i < Math.min(3, data.items.length); i++){
+            let book = data.items[i].volumeInfo;
+            let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
+            if (!correctBook) console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`);
+            else{
+                bookObj['author'] =book.authors;
+                bookObj['description'] =book.description;
+                bookObj['pageCount'] =book.pageCount;
+                bookObj['title'] =book.title;
+                break;
+            }            
         } 
-        else{
-            let bookObj = {
-                author: book.authors,
-                description: book.description,
-                pageCount : book.pageCount,
-                title: book.title
-            }
-            cb(bookObj)
-        }
+        cb(bookObj)
     })
 }
 
@@ -180,7 +170,6 @@ module.exports = function(app) {
         if (!req.user) {
             res.json({});
         } 
-        
         else {
             res.json({
               name: req.user.name,
@@ -214,8 +203,6 @@ module.exports = function(app) {
                 BookId: req.body.bookId
             }
         }).then(result => {
-            console.log('updating to past')
-            console.log(result)
             res.json(result)
         })
         .catch(err =>{
@@ -225,8 +212,6 @@ module.exports = function(app) {
 
     // delete a book
     app.delete('/api/book/:book',(req,res) =>{
-        // TODO: function to destroy a book when the user drops it
-        // probably using the req.body to get the parameters
         db.Readings.destroy({
             where:{
                 UserId: req.user.id,
@@ -246,7 +231,6 @@ module.exports = function(app) {
             defaults: {
                 name: req.body.title,
                 author: req.body.author,
-                // URL: `http://covers.openlibrary.org/b/isbn/${req.body.isbn}-M.jpg?default=false`
                 URL: `http://covers.openlibrary.org/b/OLID/${req.body.isbn}-M.jpg?default=false`
             }
         })
@@ -254,7 +238,6 @@ module.exports = function(app) {
             res.status(307).json({})
         })
         .catch(err => {
-            // console.log(err)
             res.status(401).json({err})
         })
     })
@@ -286,6 +269,7 @@ module.exports = function(app) {
             }
         })
         .then(result => res.json(result))
+        .catch(err => console.log(err))
     })
 
 
@@ -312,25 +296,27 @@ module.exports = function(app) {
     });
 
     //get the review/ratings for that book using ISBN
-    app.get('/api/books/review/:isbn', (req,res)=>{
-        
+    app.get('/api/books/review/:isbn', (req,res)=>{ 
         db.Reviews.findAll({
-            include: [{
-                model: db.Books, 
-                where: {
-                    ISBN: req.params.isbn
+            include: [
+                {
+                    model: db.Books, 
+                    where: {
+                        ISBN: req.params.isbn
+                    },
                 },
-            },
-            {model: db.Users}
-        ]
-        }).then(result => res.json(result))
-        
+                {model: db.Users}
+            ]   
+        })
+        .then(result => res.json(result))
+        .catch(err => console.log(err))
     })
 
-    
-    // recommendation function 
-    
+    //Routes to get the book recommendations from different sources 
+
+    //find the books from other users back on your common interest
     app.get('/api/recommendationUser/',(req,res) =>{
+        // first - find all the books that the user likes 
         db.Readings.findAll({
             where:{
                 UserID : req.user.id,
@@ -338,7 +324,8 @@ module.exports = function(app) {
             },
             include: [db.Books]
         }).then(results => {
-            let allFavouriteBooks = results.map(book => book.BookId)
+            let allFavouriteBooks = results.map(book => book.BookId);
+            // second - find all the users whose reading list have a common book 
             if(allFavouriteBooks.length != 0){
                 db.Readings.findAll({
                     where:{
@@ -351,7 +338,8 @@ module.exports = function(app) {
                 })
                 .then(results =>{
                     let allUsers = results.map(item => item.UserId);
-                    let uniqueUsers = [...new Set(allUsers)]
+                    let uniqueUsers = [...new Set(allUsers)];
+                    // third - find all books under user
                     db.Readings.findAll({
                         where:{
                             UserID : req.user.id
@@ -359,6 +347,7 @@ module.exports = function(app) {
                     })
                     .then(results => {
                         let allBooks = results.map(book => book.BookId);
+                        // fourth - find all books that the other users have excluding books that user already has in their list
                         db.Readings.findAll({
                             where:{
                                 UserID : uniqueUsers,
@@ -379,17 +368,16 @@ module.exports = function(app) {
             else {
                 res.json([])
             }
-            
         })
     })
 
-    // required for api request for tastedive
+    // required for api request for tastedive - resolve the cors problem
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         next();
     });
 
-
+    // route for getting recommendation from tastedive api that call upon the function declared above
     app.get('/api/recommendationTD/',(req,res) =>{
         db.Readings.findAll({
             where:{
@@ -420,6 +408,7 @@ module.exports = function(app) {
         })
     })
 
+    // route for getting the books from the new york bestseller lists
     app.get('/api/recommendationNY/:genre',(req,res) =>{
         recommendationNewYork(req.params.genre, data => {
             if(!data) {
@@ -429,13 +418,11 @@ module.exports = function(app) {
                 let isbnArray = data.results.map(result => {
                     return result.isbns[0].isbn13;
                 })
-                console.log(isbnArray)
                 let workArray = [];
-
+                // the new york time gives isbn - calls the function to convert to open library id
                 convertISBN(isbnArray, workArray, cb =>{
                     res.json(cb)
                 })
-                
             }
         })
     })
@@ -452,10 +439,10 @@ module.exports = function(app) {
             (error, response, body) => {
                 if (error || response.statusCode !== 200) {
                     console.error(error)
+                    res.json([])
                 }
                 else{
                     let data = JSON.parse(body);
-
                     let bookList =[];
                     let authorUnique = [];
                     data.docs.forEach(book => {
@@ -495,7 +482,8 @@ module.exports = function(app) {
             },
             (error, response, body) => {
                 if (error || response.statusCode !== 200) {
-                    console.error(error)
+                    console.error(error);
+                    res.json([])
                 }
                 else{
                     let data = JSON.parse(body);
@@ -515,7 +503,6 @@ module.exports = function(app) {
                                         });
                                     }
                                     titleUnique.push(book.title.toLowerCase().trim());
-                                    
                                 }
                             } 
                         }
@@ -527,7 +514,7 @@ module.exports = function(app) {
         )
     })
 
-
+    // routes to get the book information when the user clicked a book from the recommendation list
     app.get('/api/bookInfo/:isbn',(req,res) =>{
         let ISBN = req.params.isbn;
         let url = `https://openlibrary.org/api/books?bibkeys=OLID:${ISBN}&jscmd=details&format=json`
@@ -548,8 +535,8 @@ module.exports = function(app) {
                 },
                 {model: db.Users}
             ]
-            }).then(reviews => {
-
+            })
+            .then(reviews => {
                 let review = reviews.map(el =>{
                     return {
                         content: el.dataValues.content,
@@ -557,11 +544,11 @@ module.exports = function(app) {
                         name: el.dataValues.User.name
                     }
                 })
-                console.log(review)
-                let isbn = (book.isbn_13) ? book.isbn_13[0] : book.isbn_10[0]
-                getBookInfoGoogle(book.isbn,book.title, result =>{
-                    console.log(result)
-                    if(result) {
+                let isbn = 0;
+                if (book.isbn_13) isbn = book.isbn_13[0] 
+                else if (book.isbn_10) isbn = book.isbn_10[0]
+                getBookInfoGoogle(isbn,book.title, result =>{
+                    if(Object.keys(result).length !== 0) {
                         bookObj = {... result, reviews: review};
                         console.log(bookObj)
                     }
@@ -579,7 +566,6 @@ module.exports = function(app) {
                 })
             })
             .catch(err => console.log(err))
-            
         })
     })
 }

@@ -332,7 +332,7 @@ li img {
 .rating>label {
   position: relative;
   width: 1em;
-  font-size: 6vw;
+  font-size: 50px;
   color: #FFD600;
   cursor: pointer
 }
@@ -355,4 +355,16 @@ li img {
 
 .rating:hover>input:checked~label:before {
   opacity: 0.4
+}
+
+.carousel-item img {
+  height:250px;
+}
+
+.list-group-item {
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
 }
