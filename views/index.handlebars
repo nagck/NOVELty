@@ -11,7 +11,7 @@
             {{#each books}}
             {{#if this.reading}}
             <li data-id={{this.ISBN}}>
-                <img src="{{this.URL}}" data-isbn={{this.ISBN}} alt="{{this.name}}">
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
             </li>
             {{/if}}
             {{/each}}
@@ -27,7 +27,7 @@
             {{#each books}}
             {{#unless this.reading}}
             <li data-id={{this.ISBN}}>
-                <img src="{{this.URL}}" data-isbn={{this.ISBN}} alt="{{this.name}}">
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
             </li>
             {{/unless}}
             {{/each}}
