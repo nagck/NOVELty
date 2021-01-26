@@ -51,7 +51,6 @@ const recommendationNewYork = (genre, cb) =>{
 // it is a recursive function to find all the corresponding isbn
 const findISNB = (titles,isbnArray, cb) =>{
 
-    console.log(titles)
     if(titles.length == 0) cb(isbnArray);
     else{
         let title = titles.splice(0,1)[0];
@@ -78,6 +77,7 @@ const findISNB = (titles,isbnArray, cb) =>{
     
 }
 
+// convert isbn to open library id
 const convertISBN = (ISBNArray,WorkArray, cb) =>{
 
     if(ISBNArray.length == 0) cb(WorkArray);
@@ -98,6 +98,8 @@ const convertISBN = (ISBNArray,WorkArray, cb) =>{
     }
 }
 
+// function that takes a isbn, book title and a callback function
+// it will search using the google api for the book information
 const getBookInfoGoogle = (ISBN, title, cb) => {
     
     let url = `https://www.googleapis.com/books/v1/volumes?q=${ISBN}`;
@@ -107,6 +109,7 @@ const getBookInfoGoogle = (ISBN, title, cb) => {
     .then(data =>{
         let book = data.items[0].volumeInfo;
 
+        // checks to see if the title provided by google api is the similar to the one given into the function
         let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
         if (!correctBook) {
             console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
@@ -203,8 +206,6 @@ module.exports = function(app) {
                 BookId: req.body.bookId
             }
         }).then(result => {
-            console.log('updating to past')
-            console.log(result)
             res.json(result)
         })
         .catch(err =>{
@@ -298,8 +299,7 @@ module.exports = function(app) {
     });
 
     //get the review/ratings for that book using ISBN
-    app.get('/api/books/review/:isbn', (req,res)=>{
-        
+    app.get('/api/books/review/:isbn', (req,res)=>{ 
         db.Reviews.findAll({
             include: [
                 {
@@ -313,11 +313,13 @@ module.exports = function(app) {
         })
         .then(result => res.json(result))
         .catch(err => console.log(err))
-        
     })
 
-    // recommendation function 
+    //Routes to get the book recommendations from different sources 
+
+    //find the books from other users back on your common interest
     app.get('/api/recommendationUser/',(req,res) =>{
+        // first - find all the books that the user likes 
         db.Readings.findAll({
             where:{
                 UserID : req.user.id,
@@ -325,7 +327,8 @@ module.exports = function(app) {
             },
             include: [db.Books]
         }).then(results => {
-            let allFavouriteBooks = results.map(book => book.BookId)
+            let allFavouriteBooks = results.map(book => book.BookId);
+            // second - find all the users whose reading list have a common book 
             if(allFavouriteBooks.length != 0){
                 db.Readings.findAll({
                     where:{
@@ -338,7 +341,8 @@ module.exports = function(app) {
                 })
                 .then(results =>{
                     let allUsers = results.map(item => item.UserId);
-                    let uniqueUsers = [...new Set(allUsers)]
+                    let uniqueUsers = [...new Set(allUsers)];
+                    // third - find all books under user
                     db.Readings.findAll({
                         where:{
                             UserID : req.user.id
@@ -346,6 +350,7 @@ module.exports = function(app) {
                     })
                     .then(results => {
                         let allBooks = results.map(book => book.BookId);
+                        // fourth - find all books that the other users have excluding books that user already has in their list
                         db.Readings.findAll({
                             where:{
                                 UserID : uniqueUsers,
@@ -366,17 +371,16 @@ module.exports = function(app) {
             else {
                 res.json([])
             }
-            
         })
     })
 
-    // required for api request for tastedive
+    // required for api request for tastedive - resolve the cors problem
     app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         next();
     });
 
-
+    // route for getting recommendation from tastedive api that call upon the function declared above
     app.get('/api/recommendationTD/',(req,res) =>{
         db.Readings.findAll({
             where:{
@@ -407,6 +411,7 @@ module.exports = function(app) {
         })
     })
 
+    // route for getting the books from the new york bestseller lists
     app.get('/api/recommendationNY/:genre',(req,res) =>{
         recommendationNewYork(req.params.genre, data => {
             if(!data) {
@@ -416,13 +421,11 @@ module.exports = function(app) {
                 let isbnArray = data.results.map(result => {
                     return result.isbns[0].isbn13;
                 })
-                console.log(isbnArray)
                 let workArray = [];
-
+                // the new york time gives isbn - calls the function to convert to open library id
                 convertISBN(isbnArray, workArray, cb =>{
                     res.json(cb)
                 })
-                
             }
         })
     })
@@ -439,10 +442,10 @@ module.exports = function(app) {
             (error, response, body) => {
                 if (error || response.statusCode !== 200) {
                     console.error(error)
+                    res.json([])
                 }
                 else{
                     let data = JSON.parse(body);
-
                     let bookList =[];
                     let authorUnique = [];
                     data.docs.forEach(book => {
@@ -482,7 +485,8 @@ module.exports = function(app) {
             },
             (error, response, body) => {
                 if (error || response.statusCode !== 200) {
-                    console.error(error)
+                    console.error(error);
+                    res.json([])
                 }
                 else{
                     let data = JSON.parse(body);
@@ -502,7 +506,6 @@ module.exports = function(app) {
                                         });
                                     }
                                     titleUnique.push(book.title.toLowerCase().trim());
-                                    
                                 }
                             } 
                         }
@@ -514,7 +517,7 @@ module.exports = function(app) {
         )
     })
 
-
+    // routes to get the book information when the user clicked a book from the recommendation list
     app.get('/api/bookInfo/:isbn',(req,res) =>{
         let ISBN = req.params.isbn;
         let url = `https://openlibrary.org/api/books?bibkeys=OLID:${ISBN}&jscmd=details&format=json`
@@ -535,8 +538,8 @@ module.exports = function(app) {
                 },
                 {model: db.Users}
             ]
-            }).then(reviews => {
-
+            })
+            .then(reviews => {
                 let review = reviews.map(el =>{
                     return {
                         content: el.dataValues.content,
@@ -544,10 +547,8 @@ module.exports = function(app) {
                         name: el.dataValues.User.name
                     }
                 })
-                console.log(review)
                 let isbn = (book.isbn_13) ? book.isbn_13[0] : book.isbn_10[0]
                 getBookInfoGoogle(book.isbn,book.title, result =>{
-                    console.log(result)
                     if(result) {
                         bookObj = {... result, reviews: review};
                         console.log(bookObj)
@@ -566,7 +567,6 @@ module.exports = function(app) {
                 })
             })
             .catch(err => console.log(err))
-            
         })
     })
 }
