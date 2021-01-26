@@ -107,23 +107,20 @@ const getBookInfoGoogle = (ISBN, title, cb) => {
     fetch(url)
     .then(response =>response.json())
     .then(data =>{
-        let book = data.items[0].volumeInfo;
-
-        // checks to see if the title provided by google api is the similar to the one given into the function
-        let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
-        if (!correctBook) {
-            console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`) 
-            cb(false);
+        let bookObj = {}
+        for(let i = 0; i < Math.min(3, data.items.length); i++){
+            let book = data.items[i].volumeInfo;
+            let correctBook = title.toLowerCase().trim().includes(book.title.toLowerCase().trim()) || book.title.toLowerCase().trim().includes(title.toLowerCase().trim()) ; 
+            if (!correctBook) console.log(`Sorry, the book with ISBN ${ISBN} could not be found.`);
+            else{
+                bookObj['author'] =book.authors;
+                bookObj['description'] =book.description;
+                bookObj['pageCount'] =book.pageCount;
+                bookObj['title'] =book.title;
+                break;
+            }            
         } 
-        else{
-            let bookObj = {
-                author: book.authors,
-                description: book.description,
-                pageCount : book.pageCount,
-                title: book.title
-            }
-            cb(bookObj)
-        }
+        cb(bookObj)
     })
 }
 
@@ -547,9 +544,11 @@ module.exports = function(app) {
                         name: el.dataValues.User.name
                     }
                 })
-                let isbn = (book.isbn_13) ? book.isbn_13[0] : book.isbn_10[0]
+                let isbn = 0;
+                if (book.isbn_13) isbn = book.isbn_13[0] 
+                else if (book.isbn_10) isbn = book.isbn_10[0]
                 getBookInfoGoogle(isbn,book.title, result =>{
-                    if(result) {
+                    if(Object.keys(result).length !== 0) {
                         bookObj = {... result, reviews: review};
                         console.log(bookObj)
                     }
