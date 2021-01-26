@@ -548,7 +548,7 @@ module.exports = function(app) {
                     }
                 })
                 let isbn = (book.isbn_13) ? book.isbn_13[0] : book.isbn_10[0]
-                getBookInfoGoogle(book.isbn,book.title, result =>{
+                getBookInfoGoogle(isbn,book.title, result =>{
                     if(result) {
                         bookObj = {... result, reviews: review};
                         console.log(bookObj)
