@@ -2,7 +2,8 @@
 $(document).ready(function() {
     window.globals = {
         current: "",
-        past: ""
+        past: "",
+        recommendation: ""
     };
 
     // get the username and place it in the dashboard
@@ -24,10 +25,10 @@ $(document).ready(function() {
     let sliderCurrent = $("#lightSlider-current").lightSlider(sliderSetings); 
 
     let sliderPast = $("#lightSlider-past").lightSlider(sliderSetings); 
-
+    
     window.globals = {
         current: sliderCurrent,
-        past: sliderPast
+        past: sliderPast,
     };
 
     // get the recommeded books and appended in the recommendation slide
@@ -43,11 +44,52 @@ $(document).ready(function() {
             li.append(img);
             $("#lightSlider-recommendation").append(li);
         }
-        $("#lightSlider-recommendation").lightSlider(sliderSetings); 
+        let sliderRecommendation = $("#lightSlider-recommendation").lightSlider(sliderSetings); 
+        window.globals = {
+            current: sliderCurrent,
+            past: sliderPast,
+            recommendation: sliderRecommendation
+        }
         
         $("#recommendation-placeholder").addClass('hide'); // hide the loader
         $("#lightSlider-recommendation").removeClass('hide'); // show the slider
+
+
     });
+
+
+    $("#past-link").click(()=>{
+        resetLink();
+        $("#past-link").addClass('active')
+        $("#past-div").removeClass('hide')
+        globals.past.refresh();   
+    })
+
+    $("#current-link").click(()=>{
+        resetLink();
+        $("#current-link").addClass('active')
+        $("#current-div").removeClass('hide')
+        globals.current.refresh();   
+    })
+
+    $("#recommended-link").click(()=>{
+        resetLink();
+        $("#recommended-link").addClass('active')
+        $("#recommended-div").removeClass('hide')
+        globals.recommendation.refresh();   
+    })
+
+    const resetLink = () =>{
+        $("#past-link").removeClass('active')
+        $("#current-link").removeClass('active')
+        $("#recommended-link").removeClass('active')
+
+        
+        $("#current-div").addClass('hide')
+        $("#past-div").addClass('hide')
+        $("#recommended-div").addClass('hide')
+    }
+
 
     // when you click on the recommended books it shows a modal
     $("#lightSlider-recommendation").click(e =>{
