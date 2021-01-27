@@ -1,3 +1,4 @@
+// Creating reading model
 module.exports = (sequelize, DataTypes) => {
     const Readings = sequelize.define('Readings', {
       // readID: {
@@ -19,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Readings.associate = (models) => {
+      // We're saying that Reading should belong to a User
+      // A Reading can't be created without a user and book due to the foreign key constraints
       models.Readings.belongsTo(models.Users, {
         foreignKey: {
           allowNull: false,

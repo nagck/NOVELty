@@ -1,6 +1,7 @@
 // Dependencies
 const isAuthenticated = require("../config/middleware/isAuthenticated"); 
 const db = require("../models");
+const moment = require("moment")
 
 module.exports = function(app) {
 // index page - login or singup
@@ -63,7 +64,7 @@ module.exports = function(app) {
       }).then(results => {
         let reviews = results.map(el =>{
           return {
-            time : el.dataValues.createdAt,
+            time : moment(el.dataValues.createdAt).format('MMM Do, YYYY'),
             content : el.dataValues.content,
             rate : el.dataValues.rate,
             username : el.dataValues.User.name,

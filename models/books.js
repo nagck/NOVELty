@@ -1,3 +1,4 @@
+// Creating Books model
 module.exports = (sequelize, DataTypes) => {
     const Books = sequelize.define('Books', {
     //   bookID: {

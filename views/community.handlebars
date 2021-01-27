@@ -1,3 +1,8 @@
+
+<div class="row d-flex justify-content-center">
+<div class="col-md-12 col-lg-8 card bg-pink pb-7">
+{{!-- <div class="p-0 m-0 dashboard-view"> --}}
+  
 <div id="demo" class="carousel slide" data-ride="carousel">
       <!-- Indicators -->
       <ul class="carousel-indicators">
@@ -10,10 +15,13 @@
 
       <div class="carousel-inner">
       {{#each reviews}}
-      {{#unless @index}}<div class="carousel-item active bg-warning">{{/unless}}
-      {{#if @index}}<div class="carousel-item bg-warning">{{/if}}
-        
+      {{#unless @index}}<div class="carousel-item active bg-pink">{{/unless}}
+      {{#if @index}}<div class="carousel-item bg-pink">{{/if}}
+
+          <div>
             <img src="{{this.url}}" alt="{{this.title}}">
+
+          </div>
           <div class="carousel-caption text-dark">
             <h3>{{this.title}}</h3>
             <div class='rating-star' data-star='{{this.rate}}' data-slide='{{@index}}'></div>
@@ -38,4 +46,7 @@
       </a>
     </div>
 
+{{!-- </div> --}}
+</div>
+</div>
 <script src="./js/community.js"></script>
