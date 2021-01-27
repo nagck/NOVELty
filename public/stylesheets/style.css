@@ -24,6 +24,103 @@ form {
   min-width: 250px;
 }
 
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  background-image: url("../images/critics_list1.png");
+  background-size: cover;
+}
+
+/* .bg-image::after {
+  content: "";
+  background-image: url("../images/critics-list.jpg");  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.3;
+  z-index: -1;
+  /* background-size: cover; */
+} */
+
+.logo {
+  position: relative;
+  min-width: 200px;
+  max-width: 30%;
+  border-radius: 50%;
+  opacity: 1;
+  z-index: 2;
+}
+
+.secondary-logo {
+  color: black;
+  /* font: 52px bold Helvetica, Arial; */
+  /* margin: 5px */
+}
+.secondary-logo > span:first-child {
+  color: #a08804;
+}
+
+.btn-primary:hover {
+  min-width: 8rem;
+  border: 2px solid #D55A5B;
+  background-color: #D55A5B;
+  color: #fff;
+  font-weight: bold;
+}
+
+.btn-primary:active {
+  background-color: #888 !important;
+  border: 2px solid #888;
+  outline: none;
+}
+
+.login {
+  background-color: #fff;
+}
+
+.text-primary {
+  color: #D55A5B !important;
+}
+
+.text-secondary {
+  color: black !important;
+}
+
+.btn-primary {
+  min-width: 8rem;
+  border: 2px solid #D55A5B;
+  background-color: #fff;
+  color: #D55A5B;
+  font-weight: bold;
+  margin: 1rem;
+}
+/* ======= */
+/* form.login, form.signup {
+  top: 0;
+  position: relative;
+  transition: all;
+  box-shadow: 0px 10px 40px black;
+  border-radius: 3px;
+  background-color: #c8a115;
+  animation: fade-in 0.5s linear;
+}
+
+form {
+  min-width: 250px;
+}
+
+.fixed-ratio-resize {
+  max-width: 65%;
+  height: auto;
+  width: auto;
+  opacity: 80%;
+} */
 /* * {
   border: 1px solid green;
 } */
@@ -37,9 +134,12 @@ html {
   /* position: relative;  */
   min-height: 100%;
   overflow-x: hidden;
+  background-image: url("../images/critics-list1.png");
+  background-size: cover;
+
 }
 
-.bg-image::after {
+/* .bg-image::after {
   content: "";
   background-image: url("../images/critics-list.jpg");  background-size: cover;
   position: absolute;
@@ -50,7 +150,6 @@ html {
   opacity: 0.3;
   z-index: -1;
   /* background-size: cover; */
-}
 
 .logo {
   position: relative;
@@ -116,7 +215,7 @@ html {
 }
 
 .header-block {
-  padding-top: 6rem;
+  /* padding-top: 6rem; */
   padding-left: 1rem;
   font: bolder;
   font-family: Arial, Helvetica, sans-serif;
@@ -258,6 +357,9 @@ li img {
   cursor: pointer;
 }
 
+.card{
+  min-height: 25rem;
+}
 .pointer {
   cursor: pointer;
 }
