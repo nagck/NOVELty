@@ -2,7 +2,39 @@
 <div class="col-md-9"><h2 class="text-primary"> Welcome back <span id="name-of-user"></span><span>!</span></h2></div>
 
 <div class="row d-flex justify-content-center">
-  <div class="col-md-12 col-lg-8 card">
+<div class="col-md-12 col-lg-8 card">
+
+  <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" id='current-link'>Current Books</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id='past-link'>Past books</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id='recommended-link'>Recommended for you</a>
+  </li>
+  {{!-- <li class="nav-item">
+    <a class="nav-link disabled" href="#">Disabled</a>
+  </li> --}}
+  </ul>
+
+  <div class="p-0 m-0 dashboard-view" id='current-div'>
+
+
+    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
+
+    <div class="" id="current-list" >
+        <ul id="lightSlider-current">
+
+            {{#each books}}
+            {{#if this.reading}}
+            <li data-id={{this.ISBN}}>
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}"  class="pointer">
+
+            </li>
+            {{/if}}
+            {{/each}}
         
             {{!-- These are our dashboard's navigation tabs--}}
         <ul class="nav nav-tabs justify-content-end">
@@ -22,68 +54,52 @@
             <a class="nav-link disabled" href="#">Disabled</a>
           </li> --}}
         </ul>
-      {{!-- This is the div where our tabs' content will display --}}
-    <div class="p-0 m-0 dashboard-view tab-content">
-
-      <div class="tap-pane fade show active" role="tabpanel" id="current">
-
-      <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
-
-        <div class="col-md-8 col-lg-6" id="current-list" >
-          <ul id="lightSlider-current">
-
-              {{#each books}}
-              {{#if this.reading}}
-              <li data-id={{this.ISBN}}>
-                  <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}"  class="pointer">
-              </li>
-              {{/if}}
-              {{/each}}
-          
-          </ul>
-        </div>
-      </div>  
     </div>
 
-    <div class="tap-pane fade" role="tabpanel" id="past">
 
-      <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
-      
-        <div class="container">
-          <div class="row d-flex justify-content-center">
-            <div class="col-md-12 col-lg-10" id="past-list"  >
-            
-              <ul class="mx-auto text-center"  id="lightSlider-past">
-
-                {{#each books}}
-                {{#unless this.reading}}
-                <li data-id={{this.ISBN}}>
-                    <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
-                </li>
-                {{/unless}}
-                {{/each}}
-            
-              </ul>
-            </div>
-          </div>
-        </div>
     </div>
 
-    <div class="tab-pane fade" id="recommendations" role="tabpanel">
+    <div class="p-0 m-0 dashboard-view hide" id='past-div'>
 
-      <h2>Recommended titles for you:</h2>
 
-        <div id="recommendation-placeholder">
-          <div class="loader"></div>
-        </div>
+     <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
+    <div class="" id="past-list" >
+        <ul id="lightSlider-past">
 
-        <div class="col-md-8 col-lg-6">
-          <ul id="lightSlider-recommendation" class="hide">
-          
-          </ul>
-        </div>
-    </div>    
-  </div>
+            {{#each books}}
+            {{#unless this.reading}}
+            <li data-id={{this.ISBN}}>
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
+
+            </li>
+            {{/unless}}
+            {{/each}}
+        
+        </ul>
+    </div>
+
+  
+
+    </div>
+
+    <div class="p-0 m-0 dashboard-view hide" id="recommended-div">
+
+
+    <h3>Recommended titles for you:</h3>
+
+<div id="recommendation-placeholder">
+        <div class="loader"></div>
+    </div>
+    <div class="">
+        <ul id="lightSlider-recommendation" class="hide">
+        
+        </ul>
+    </div>
+
+  
+
+    </div>
+</div>
 </div>
 
 
