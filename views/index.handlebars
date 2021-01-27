@@ -6,13 +6,13 @@
 
   <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" id='current-link'>Current Books</a>
+    <a class="nav-link pointer active" id='current-link'>Current Books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id='past-link'>Past books</a>
+    <a class="nav-link pointer" id='past-link'>Past books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id='recommended-link'>Recommended for you</a>
+    <a class="nav-link pointer" id='recommended-link'>Recommended for you</a>
   </li>
   {{!-- <li class="nav-item">
     <a class="nav-link disabled" href="#">Disabled</a>
@@ -36,23 +36,7 @@
             {{/if}}
             {{/each}}
         
-            {{!-- These are our dashboard's navigation tabs--}}
-        <ul class="nav nav-tabs justify-content-end">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#current-list" role="tab">Current Books</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#past-list" role="tab">Past books</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#recommendations">Recommended for you</a>
-          </li>
-
-          {{!-- <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li> --}}
+      
         </ul>
     </div>
 

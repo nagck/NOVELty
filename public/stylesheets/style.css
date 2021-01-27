@@ -271,7 +271,22 @@ li img {
   padding-top: 5rem;
 }
 
-.lslide {
-  background-color: #dbcad5;
+.center-slide .lslide {
+  background-color: #D55A5B;
   text-align: center;
-  }
+}
+
+#book-cover{
+  height: 250px;
+  width: 200px;
+}
+
+.bg-pink {
+  background-color: #D55A5B;
+}
+
+.carousel-inner img {
+  
+  height: 250px;
+  width: 200px;
+}
