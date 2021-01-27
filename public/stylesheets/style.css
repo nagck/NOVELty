@@ -259,7 +259,7 @@ li img {
   cursor: pointer;
 }
 
-.lslide {
-  background-color: #dbcad5;
+.center-slide .lslide {
+  background-color: #D55A5B;
   text-align: center;
 }
