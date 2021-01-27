@@ -18,18 +18,20 @@ $(document).ready(function() {
         easing: 'cubic-bezier(0.25, 0, 0.25, 1)',
         slideMargin: 20,
         speed:600,
+        addClass:"center-slide",
         enableDrag:false,
         responsive : []
     }
     
     let sliderCurrent = $("#lightSlider-current").lightSlider(sliderSetings); 
-
     let sliderPast = $("#lightSlider-past").lightSlider(sliderSetings); 
     
     window.globals = {
         current: sliderCurrent,
         past: sliderPast,
     };
+
+    globals.current.refresh();   
 
     // get the recommeded books and appended in the recommendation slide
     getRecommendation(recommendationISBN =>{
@@ -40,6 +42,7 @@ $(document).ready(function() {
             img.attr("alt",`ISBN: ${recommendationISBN[i]}`);
             img.addClass("pointer")
             let li = $("<li>");
+            li.addClass("center-slide");
             li.attr("data-id",recommendationISBN[i]);
             li.append(img);
             $("#lightSlider-recommendation").append(li);
@@ -304,7 +307,9 @@ $(document).ready(function() {
                     img.attr("data-isbn",data[0].ISBN);
                     img.attr("alt",data[0].name);
                     let li = $("<li>");
-                    li.attr("data-id",data[0].ISBN)
+                    li.attr("data-id",data[0].ISBN);
+                    li.addClass("center-slide");
+                    li.addClass("lslide");
                     li.append(img);
                     if($('#modal-search').attr("data-search") === "current") {
                         $("#lightSlider-current").append(li);
