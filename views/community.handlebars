@@ -1,6 +1,10 @@
+<div class="row d-flex justify-content-center">
+  <h2 class="text-primary"> Latest Reviews</h2>
+</div>
 
 <div class="row d-flex justify-content-center">
-<div class="col-md-12 col-lg-8 card bg-pink pb-7">
+
+<div class="col-md-12 col-lg-8 bg-pink">
 {{!-- <div class="p-0 m-0 dashboard-view"> --}}
   
 <div id="demo" class="carousel slide" data-ride="carousel">
@@ -13,25 +17,32 @@
         {{/each}}
       </ul>
 
+      
+
       <div class="carousel-inner">
       {{#each reviews}}
       {{#unless @index}}<div class="carousel-item active bg-pink">{{/unless}}
       {{#if @index}}<div class="carousel-item bg-pink">{{/if}}
 
-          <div>
-            <img src="{{this.url}}" alt="{{this.title}}">
+        <div class="row justify-content-center">
+          <div class="col-sm-6 col-md-4">
+                <img id="carousel-image" src="{{this.url}}" alt="{{this.title}}">
+            </div>
+            <div class="col-sm-5 col-md-4">
+                <h3>{{this.title}}</h3>
+                <p>by {{this.author}}</p>
+              <div class='rating-star' data-star='{{this.rate}}' data-slide='{{@index}}'></div>
+              <p>
+                {{this.content}}
+              </p>
+              <p>
+                - {{this.username}} at {{this.time}}
+              </p>
+            </div>
 
-          </div>
-          <div class="carousel-caption text-dark">
-            <h3>{{this.title}}</h3>
-            <div class='rating-star' data-star='{{this.rate}}' data-slide='{{@index}}'></div>
-            <p>
-              {{this.content}}
-            </p>
-            <p>
-              {{this.username}} at {{this.time}}
-            </p>
-          </div>
+        </div>
+          
+
         </div>
       {{/each}}
       
