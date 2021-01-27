@@ -1,5 +1,9 @@
 # NOVELty (Project #2)
-Have you ever read a book and thought to yourself: “I need to share this book with someone?”. You have come to the right place. NOVELty is one-stop shop for keeping track of all the books you are reading/read, get personalized book recommendations and participate in your book reading community by sharing the book that you like and partcipare in book reviews. 
+Have you ever read a book and thought to yourself: “I need to share this book with someone?”. 
+<br><br>
+YOU HAVE COME TO THE RIGHT PLACE!!.
+<br><br>
+NOVELty is one-stop shop for keeping track of all the books you are reading/read, get personalized book recommendations and participate in your book reading community by sharing the book that you like and partcipate in book reviews. 
 
 ## Description
 NOVELty is a full-stack application devloped using Node, Express, JavaScript, MySQL, Sequelize, Handlebars, Bootstrap, HTML, CSS, Passport, ORM and several APIs.
@@ -19,6 +23,7 @@ https://novelty.herokuapp.com/
 - [User Story](#user-story)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Credits](#credits)
 - [License](#license)
 - [Contributing](#contributing)
 - [Feedback](#feedback)
@@ -31,21 +36,21 @@ https://novelty.herokuapp.com/
 * [Natasha Fray](https://github.com/Tasha876)
 
 ## User Story
-As someone always looking to recommend new books based on my preferences.
-I want to be able to have the app track whether I finish reading it or not
+- As someone always looking to recommend new books based on my preferences.<br>
+I want to be able to have the app track whether I finish reading it or not<br>
 So that I can have books recommended to me based on similar interests and the ratings given by the API.
 
-As a user of the app, 
-I want a clean dashboard interface to easily view and update my preferences, books and recommendations.
+- As a user of the app,<br> 
+I want a clean dashboard interface to easily view and update my preferences, books and recommendations.<br>
 So that I can easily use and navigate the app and spend more time reading.
 
-As a fan of books, 
-I want to be able to share my literary preferences, list of books read, and books I’m reading.
+- As a fan of books,<br> 
+I want to be able to share my literary preferences, list of books read, and books I’m reading.<br>
 So that I can receive recommendations from other users with similar tastes.
 
-As a user of the app, 
-I want to be able to share personal ratings of books to others.
-So that others can find out whether or not users with similar book preferences recommend them or not.
+- As a user of the app,<br> 
+I want to be able to share personal ratings of books to others.<br>
+So that others can find out whether or not users with similar book preferences recommend them or not.<br>
 
 ## Installation
 
@@ -87,23 +92,23 @@ Point your browser to http://localhost:8080/ to start using the application.
 - The application has been developed using JavaScript, Node.js, Express, npm, MySQL, ORM, Handlebars and APIs. 
 - Sincere thanks to our course instructors Ed (Edward Apostol), Anas (Anas Qazi) and Herman (German Arcila) for teaching and helping us in acquring HTML/CSS/JavaScript/Node.js/MySQL skills. 
 
-- And of course sincere thanks to all our project members.
+- AND, OF COURSE SINCERE THANKS TO ALL OUR PROJECT MEMBERS.
 
 - Here are some websites that we referred to develop the application:
-* https://www.npmjs.com/
-* https://www.npmjs.com/package/express
-* https://www.w3schools.com/nodejs/
-* https://dev.mysql.com/
-* https://handlebarsjs.com/
-* http://sachinchoolur.github.io/lightslider/
-* https://developer.mozilla.org/en-US/docs/Web/JavaScript
-* https://www.w3schools.com/js/default.asp
-* https://sqlbolt.com/
-* https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
-* https://www.postman.com/
-* https://www.npmjs.com/package/node-fetch
-* https://www.npmjs.com/package/passport
-* https://www.npmjs.com/package/request* 
+    * https://www.npmjs.com/
+    * https://www.npmjs.com/package/express
+    * https://www.w3schools.com/nodejs/
+    * https://dev.mysql.com/
+    * https://handlebarsjs.com/
+    * http://sachinchoolur.github.io/lightslider/
+    * https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    * https://www.w3schools.com/js/default.asp
+    * https://sqlbolt.com/
+    * https://www.postman.com/
+    * https://www.npmjs.com/package/node-fetch
+    * https://www.npmjs.com/package/passport
+    * https://www.npmjs.com/package/request* 
+    * https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
 
 
 ## License
