@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         len: [1, 140],
       },
     },
+    // Password validation - cannot be null and must between 6-20 characters 
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -23,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         len: [6, 20],
       },
     },
+    // Email validation - cannot be null, and must be a proper email address
     email: {
       type: DataTypes.STRING,
       allowNull: false,
