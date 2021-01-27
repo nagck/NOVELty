@@ -34,7 +34,7 @@ html {
 }
 
 .bg-image {
-  position: relative; 
+  /* position: relative;  */
   min-height: 100%;
   overflow-x: hidden;
 }
@@ -117,6 +117,7 @@ html {
 
 .header-block {
   padding-top: 3rem;
+  padding-left: 6rem;
   font: bolder;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 35px;
@@ -246,7 +247,9 @@ li img {
 .rating:hover>input:checked~label:before {
   opacity: 0.4
 }
-
+.carousel-item {
+  opacity: 80%;
+}
 .carousel-item img {
   height:250px;
 }
@@ -259,7 +262,10 @@ li img {
   cursor: pointer;
 }
 
-.lslide {
+#demo {
+  padding-top: 5rem;
+
+/* .lslide {
   background-color: #dbcad5;
   text-align: center;
-}
+} */
