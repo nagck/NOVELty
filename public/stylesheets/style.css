@@ -62,7 +62,7 @@ body {
   /* font: 52px bold Helvetica, Arial; */
   /* margin: 5px */
 }
-.secondary-logo > span:first-child {
+.secondary-logo > span:nth-child(2) {
   color: #a08804;
 }
 
