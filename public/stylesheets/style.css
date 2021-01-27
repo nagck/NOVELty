@@ -131,7 +131,7 @@ html {
 }
 
 .bg-image {
-  position: relative; 
+  /* position: relative;  */
   min-height: 100%;
   overflow-x: hidden;
   background-image: url("../images/critics-list1.png");
@@ -196,7 +196,7 @@ html {
 }
 
 .btn-primary {
-  width: 8rem;
+  min-width: 8rem;
   border: 2px solid #D55A5B;
   background-color: #fff;
   color: #D55A5B;
@@ -215,7 +215,8 @@ html {
 }
 
 .header-block {
-  padding-top: 3rem;
+  /* padding-top: 6rem; */
+  padding-left: 1rem;
   font: bolder;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 35px;
@@ -345,7 +346,9 @@ li img {
 .rating:hover>input:checked~label:before {
   opacity: 0.4
 }
-
+.carousel-item {
+  opacity: 80%;
+}
 .carousel-item img {
   height:250px;
 }
@@ -361,7 +364,11 @@ li img {
   cursor: pointer;
 }
 
+#demo {
+  padding-top: 5rem;
+}
+
 .lslide {
   background-color: #dbcad5;
   text-align: center;
-}
+  }
