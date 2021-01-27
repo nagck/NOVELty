@@ -312,7 +312,7 @@ li img {
   text-align: center;
 }
 
-#book-cover{
+#book-cover.img{
   height: 250px;
   width: 200px;
 }
