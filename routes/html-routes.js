@@ -69,7 +69,8 @@ module.exports = function(app) {
             rate : el.dataValues.rate,
             username : el.dataValues.User.name,
             url : el.dataValues.Book.URL,
-            title: el.dataValues.Book.name
+            title: el.dataValues.Book.name,
+            author: el.dataValues.Book.author
           }
         })
         res.render('community', {reviews: reviews, whichPartial: function() {
@@ -81,9 +82,11 @@ module.exports = function(app) {
     
   });
 
-  // Do we need a profile page so that they can change their password?
-  app.get('/profile',isAuthenticated, (req,res)=>{
-    res.render('profile', {});
+  app.get('*', (req,res)=>{
+    if (req.user) {
+      res.redirect("/");
+    }
   });
+
 
 }
