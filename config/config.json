@@ -1,13 +1,8 @@
 {
   "development": {
     "username": "root",
-<<<<<<< HEAD
-    "password": "f0rcheTTes*",
+    "password": null,
     "database": "book_demo2",
-=======
-    "password": "octosoft",
-    "database": "novelty",
->>>>>>> cd6bb20c6a7c1108a7bda10bcdd6cc97cafe1ef8
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

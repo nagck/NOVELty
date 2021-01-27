@@ -29,13 +29,13 @@ html {
   width: 100%;
 }
 
-.bg-image {
-  position: relative; 
-  min-height: 100%;
+body {
   overflow-x: hidden;
+  background-image: url("../images/critics_list1.png");
+  background-size: cover;
 }
 
-.bg-image::after {
+/* .bg-image::after {
   content: "";
   background-image: url("../images/critics-list.jpg");  background-size: cover;
   position: absolute;
@@ -46,7 +46,7 @@ html {
   opacity: 0.3;
   z-index: -1;
   /* background-size: cover; */
-}
+} */
 
 .logo {
   position: relative;
@@ -120,11 +120,7 @@ form {
   height: auto;
   width: auto;
   opacity: 80%;
->>>>>>> 93680ec4003dc89b0d48365b6b1c3c260c769cae
 } */
-
-=======
->>>>>>> cd6bb20c6a7c1108a7bda10bcdd6cc97cafe1ef8
 /* * {
   border: 1px solid green;
 } */
@@ -138,9 +134,12 @@ html {
   position: relative; 
   min-height: 100%;
   overflow-x: hidden;
+  background-image: url("../images/critics-list1.png");
+  background-size: cover;
+
 }
 
-.bg-image::after {
+/* .bg-image::after {
   content: "";
   background-image: url("../images/critics-list.jpg");  background-size: cover;
   position: absolute;
@@ -151,7 +150,6 @@ html {
   opacity: 0.3;
   z-index: -1;
   /* background-size: cover; */
-}
 
 .logo {
   position: relative;
@@ -356,6 +354,9 @@ li img {
   cursor: pointer;
 }
 
+.card{
+  min-height: 25rem;
+}
 .pointer {
   cursor: pointer;
 }
