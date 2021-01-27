@@ -116,8 +116,8 @@ html {
 }
 
 .header-block {
-  padding-top: 3rem;
-  padding-left: 6rem;
+  padding-top: 6rem;
+  padding-left: 1rem;
   font: bolder;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 35px;
@@ -264,8 +264,9 @@ li img {
 
 #demo {
   padding-top: 5rem;
+}
 
-/* .lslide {
+.lslide {
   background-color: #dbcad5;
   text-align: center;
-} */
+  }
