@@ -8,13 +8,13 @@
 
   <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" id='current-link'>Current Books</a>
+    <a class="nav-link pointer active" id='current-link'>Current Books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id='past-link'>Past books</a>
+    <a class="nav-link pointer" id='past-link'>Past books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id='recommended-link'>Recommended for you</a>
+    <a class="nav-link pointer" id='recommended-link'>Recommended for you</a>
   </li>
   {{!-- <li class="nav-item">
     <a class="nav-link disabled" href="#">Disabled</a>
@@ -23,18 +23,11 @@
 
   <div class="p-0 m-0 dashboard-view" id='current-div'>
 
-{{!-- <<<<<<< HEAD --}}
-    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-backdrop="static" data-search="current"  data-keyboard="false">Add a Book</button></h3>
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-      
-    <div class="col-md-12 col-lg-10" id="current-list" >
-{{!-- =======
+
 
     <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
 
     <div class="" id="current-list" >
->>>>>>> cd6bb20c6a7c1108a7bda10bcdd6cc97cafe1ef8 --}}
         <ul id="lightSlider-current">
 
             {{#each books}}
@@ -45,24 +38,7 @@
             </li>
             {{/if}}
             {{/each}}
-        
-            {{!-- These are our dashboard's navigation tabs
-        <ul class="nav nav-tabs justify-content-end">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#current-list" role="tab">Current Books</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#past-list" role="tab">Past books</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#recommendations">Recommended for you</a>
-          </li> --}}
-
-          {{!-- <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li> --}}
+            
         </ul>
     </div>
 
