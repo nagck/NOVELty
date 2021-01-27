@@ -241,7 +241,7 @@ html {
 
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border-top: 16px solid #D55A5B; /* Blue */
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -374,7 +374,7 @@ li img {
   text-align: center;
 }
 
-#book-cover{
+#book-cover img{
   height: 250px;
   width: 200px;
 }
