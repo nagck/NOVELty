@@ -365,7 +365,8 @@ li img {
 }
 
 #demo {
-  padding-top: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
 }
 
 .center-slide .lslide {
@@ -386,4 +387,22 @@ li img {
   
   height: 250px;
   width: 200px;
+} 
+
+.carousel-indicators {
+  position: absolute;
+  bottom: -0px;
+  }
+
+#carousel-image {
+  float:right
+}
+
+@media only screen and (max-width: 512px) {
+  #carousel-image {
+   float:none;
+  }
+  #demo {
+    padding-left: 2em;
+   }
 }
