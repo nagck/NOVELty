@@ -139,74 +139,8 @@ html {
 
 }
 
-/* .bg-image::after {
-  content: "";
-  background-image: url("../images/critics-list.jpg");  background-size: cover;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  opacity: 0.3;
-  z-index: -1;
-  /* background-size: cover; */
-
-.logo {
-  position: relative;
-  min-width: 200px;
-  max-width: 30%;
-  border-radius: 50%;
-  opacity: 1;
-  z-index: 2;
-}
-
 h5.text-center {
   font-size: 1.75rem;
-}
-
-.secondary-logo {
-  color: black;
-  /* font: 52px bold Helvetica, Arial; */
-  /* margin: 5px */
-}
-.secondary-logo > span:first-child {
-  color: #a08804;
-}
-
-.btn-primary:hover {
-  min-width: 8rem;
-  border: 2px solid #D55A5B;
-  background-color: #D55A5B;
-  color: #fff;
-  font-weight: bold;
-}
-
-.btn-primary:active {
-  background-color: #888 !important;
-  border: 2px solid #888;
-  outline: none;
-}
-
-.login {
-  background-color: #fff;
-}
-
-.text-primary {
-  color: #D55A5B !important;
-  text-align:center;
-}
-
-.text-secondary {
-  color: black !important;
-}
-
-.btn-primary {
-  min-width: 8rem;
-  border: 2px solid #D55A5B;
-  background-color: #fff;
-  color: #D55A5B;
-  font-weight: bold;
-  margin: 1rem;
 }
 
 .jumbotron {
