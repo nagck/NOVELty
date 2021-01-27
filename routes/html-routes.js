@@ -1,3 +1,4 @@
+// Dependencies
 const isAuthenticated = require("../config/middleware/isAuthenticated"); 
 const db = require("../models");
 
@@ -29,14 +30,9 @@ module.exports = function(app) {
     }});
   });
 
-  // These need to be changed
-    // newuser page
-  app.get('/newuser', (req,res)=>{
-    res.render('newuser', {});
-    });
-
+  // index page
   app.get('/index',isAuthenticated, (req,res)=>{
-    console.log(req.user.id)
+    // find the books under the user's list
     db.Readings.findAll({
       where: {
         UserID: req.user.id
@@ -44,9 +40,7 @@ module.exports = function(app) {
       include:[db.Books]
     })
     .then(results =>{
-      console.log('logging in')
       let books = results.map(el =>{
-        console.log(el)
         return {
           ISBN : el.Book.dataValues.ISBN,
           URL : el.Book.dataValues.URL,
@@ -54,23 +48,20 @@ module.exports = function(app) {
           reading : el.reading
         }
       })
-      console.log(books)
       res.render('index', {books: books, whichPartial: function() {
         return "header/no-header";
       }});
     })
-    
   });
 
+  // community page
   app.get('/community',isAuthenticated, (req,res)=>{
-
       db.Reviews.findAll({
           include: [db.Users, db.Books],
           order: [["createdAt", "DESC"]],
           limit: 5
       }).then(results => {
         let reviews = results.map(el =>{
-          console.log(el)
           return {
             time : el.dataValues.createdAt,
             content : el.dataValues.content,
@@ -80,7 +71,6 @@ module.exports = function(app) {
             title: el.dataValues.Book.name
           }
         })
-        console.log(reviews)
         res.render('community', {reviews: reviews, whichPartial: function() {
           return "header/header-community";
         }});
@@ -94,6 +84,5 @@ module.exports = function(app) {
   app.get('/profile',isAuthenticated, (req,res)=>{
     res.render('profile', {});
   });
-  
 
 }

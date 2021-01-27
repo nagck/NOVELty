@@ -12,10 +12,11 @@
       {{#each reviews}}
       {{#unless @index}}<div class="carousel-item active bg-warning">{{/unless}}
       {{#if @index}}<div class="carousel-item bg-warning">{{/if}}
-          <img src="{{this.url}}" alt="{{this.title}}">
+        
+            <img src="{{this.url}}" alt="{{this.title}}">
           <div class="carousel-caption text-dark">
             <h3>{{this.title}}</h3>
-            <div>Ratings: {{this.rate}}</div>
+            <div class='rating-star' data-star='{{this.rate}}' data-slide='{{@index}}'></div>
             <p>
               {{this.content}}
             </p>
@@ -27,45 +28,6 @@
       {{/each}}
       
       </div>
-{{!-- 
-      <!-- The slideshow -->
-      <div class="carousel-inner">
-        <div class="carousel-item active bg-warning">
-          <img
-            class="d-block w-75 mx-auto"
-            src="https://images.pexels.com/photos/1181599/pexels-photo-1181599.jpeg"
-            alt="Woman reading"
-          />
-          <div class="carousel-caption text-dark">
-            <h3>Book Covers</h3>
-            <p>
-              Some book covers are so delicious, like eating a Crème brûlée!
-            </p>
-          </div>
-        </div>
-        <div class="carousel-item bg-light">
-          <img
-            class="d-block w-75 mx-auto"
-            src="https://cdn.pixabay.com/photo/2017/12/17/16/08/customer-experience-3024488_960_720.jpg"
-            alt="Rating stars"
-          />
-          <div class="carousel-caption text-light">
-            <h3>Book Ratings</h3>
-            <p>Book Ratings are of utmost importance!</p>
-          </div>
-        </div>
-        <div class="carousel-item bg-secondary">
-          <img
-            class="d-block w-75 mx-auto"
-            src="https://images.pexels.com/photos/2846814/pexels-photo-2846814.jpeg"
-            alt="Book with coffee"
-          />
-          <div class="carousel-caption text-light">
-            <h3>Book Reviews</h3>
-            <p>Book reviews help readers to choose a new book to read!</p>
-          </div>
-        </div>
-      </div> --}}
 
       <!-- Left and right controls -->
       <a class="carousel-control-prev" href="#demo" data-slide="prev">
@@ -76,3 +38,4 @@
       </a>
     </div>
 
+<script src="./js/community.js"></script>

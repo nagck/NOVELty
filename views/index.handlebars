@@ -1,5 +1,9 @@
 {{!-- This is the content of the {{body}} tag in our main layout --}}
+<<<<<<< HEAD
 <div class="col-md-12 float-left"><h1 class="text-primary"> Welcome back <span id="name-of-user"></span></h1></div></div>
+=======
+<div class="col-md-8"><h2 class="text-primary"> Welcome back <span id="name-of-user"></span></h2></div>
+>>>>>>> cd6bb20c6a7c1108a7bda10bcdd6cc97cafe1ef8
 
 {{!-- </div> --}}
 <div class="container-fluid">
@@ -8,75 +12,92 @@
 
   <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" href="#">Current Books</a>
+    <a class="nav-link active" id='current-link'>Current Books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Past books</a>
+    <a class="nav-link" id='past-link'>Past books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Recommended</a>
+    <a class="nav-link" id='recommended-link'>Recommended for you</a>
   </li>
   {{!-- <li class="nav-item">
     <a class="nav-link disabled" href="#">Disabled</a>
   </li> --}}
-</ul>
+  </ul>
 
-<div class="p-0 m-0 dashboard-view">
+  <div class="p-0 m-0 dashboard-view" id='current-div'>
 
+<<<<<<< HEAD
     <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-backdrop="static" data-search="current"  data-keyboard="false">Add a Book</button></h3>
   <div class="container">
     <div class="row d-flex justify-content-center">
       
     <div class="col-md-12 col-lg-10" id="current-list" >
+=======
+
+    <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
+
+    <div class="" id="current-list" >
+>>>>>>> cd6bb20c6a7c1108a7bda10bcdd6cc97cafe1ef8
         <ul id="lightSlider-current">
 
             {{#each books}}
             {{#if this.reading}}
+            <li data-id={{this.ISBN}}>
+                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}"  class="pointer">
 
-            <li class="p-4" data-id={{this.ISBN}}>
-                <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
             </li>
             {{/if}}
             {{/each}}
         
         </ul>
     </div>
+
+  
+
     </div>
-</div>
-</div>
+
+    <div class="p-0 m-0 dashboard-view hide" id='past-div'>
 
 
-    <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
-<div class="container">
-    <div class="row d-flex justify-content-center">
-    <div class="col-md-12 col-lg-10" id="past-list"  >
-        <ul class="mx-auto text-center"  id="lightSlider-past">
+     <h3>Books you have finished reading: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search" data-search="past" data-backdrop="static"  data-keyboard="false">Add a Book</button></h3>
+    <div class="" id="past-list" >
+        <ul id="lightSlider-past">
 
             {{#each books}}
             {{#unless this.reading}}
             <li data-id={{this.ISBN}}>
                 <img src="{{this.URL}}" data-isbn="{{this.ISBN}}" alt="{{this.title}}">
+
             </li>
             {{/unless}}
             {{/each}}
         
         </ul>
     </div>
-    </div>
+
+  
+
     </div>
 
-    <h2>Recommended titles for you:</h2>
+    <div class="p-0 m-0 dashboard-view hide" id="recommended-div">
 
-    <div id="recommendation-placeholder">
+
+    <h3>Recommended titles for you:</h3>
+
+<div id="recommendation-placeholder">
         <div class="loader"></div>
     </div>
-
-    <div class="col-md-8 col-lg-6">
+    <div class="">
         <ul id="lightSlider-recommendation" class="hide">
         
         </ul>
     </div>
 
+  
+
+    </div>
+</div>
 </div>
 
 
@@ -94,7 +115,7 @@
         <h3>Search by Title</h3>
         <form class="title">
             <div class="form-group">
-            <input type="title" class="form-control" id="title-input" placeholder="Title">
+            <input type="title" class="form-control" id="title-input" placeholder="Title" required>
             </div>
             <button type="submit" class="btn btn-primary">Search Title</button>
         </form>
@@ -102,7 +123,7 @@
         <h3>Search by Author</h3>
         <form class="author">
             <div class="form-group">
-            <input type="author" class="form-control" id="author-input" placeholder="Author">
+            <input type="author" class="form-control" id="author-input" placeholder="Author" required>
             </div>
             <button type="submit" class="btn btn-primary">Search Author</button>
         </form>
@@ -181,7 +202,7 @@
       <div class="modal-body">
         <div id="book-cover">
         </div>
-        <div>
+        <div style="max-height: 200px; overflow-y: auto;">
           Title: <span id='book-title'></span>
           <br>
           Author: <span id='book-author'></span>
@@ -195,7 +216,7 @@
         <div>
           <h4>Reviews:</h4>
         </div>
-        <div id="book-review">
+        <div id="book-review" style="max-height: 100px; overflow-y: auto;">
           None available at the moment
         </div>
       <div class="modal-footer">
