@@ -43,8 +43,8 @@ const getRecommendation = (cb) =>{
     // wait for all the recommendation api calls
     Promise.all([
         fetch(`/api/recommendationUser/`),
-        // fetch(`/api/recommendationTD/`), 
-        // fetch(`/api/recommendationNY/hardcover-fiction`),
+        fetch(`/api/recommendationTD/`), 
+        fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
         return Promise.all(responses.map(function (response) {
