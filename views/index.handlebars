@@ -1,20 +1,18 @@
 {{!-- This is the content of the {{body}} tag in our main layout --}}
 {{!-- <div class="col-md-9"><h2 class="text-primary"> Welcome back <span id="name-of-user"></span><span>!</span></h2></div> --}}
 
-{{!-- </div> --}}
-<div class="container-fluid">
 <div class="row d-flex justify-content-center">
 <div class="col-md-12 col-lg-8 card">
 
   <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link pointer active" id='current-link'>Current Books</a>
+    <a class="nav-link active" id='current-link'>Current Books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link pointer" id='past-link'>Past books</a>
+    <a class="nav-link" id='past-link'>Past books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link pointer" id='recommended-link'>Recommended for you</a>
+    <a class="nav-link" id='recommended-link'>Recommended for you</a>
   </li>
   {{!-- <li class="nav-item">
     <a class="nav-link disabled" href="#">Disabled</a>
@@ -22,7 +20,6 @@
   </ul>
 
   <div class="p-0 m-0 dashboard-view" id='current-div'>
-
 
 
     <h3>Books on your Reading and To-Read List: <button class="btn btn-primary"  data-toggle="modal" data-target="#modal-search"  data-search="current" >Add a Book</button></h3>
@@ -38,7 +35,24 @@
             </li>
             {{/if}}
             {{/each}}
-            
+        
+            {{!-- These are our dashboard's navigation tabs--}}
+        <ul class="nav nav-tabs justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#current-list" role="tab">Current Books</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#past-list" role="tab">Past books</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#recommendations">Recommended for you</a>
+          </li>
+
+          {{!-- <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li> --}}
         </ul>
     </div>
 
@@ -211,8 +225,6 @@
       </div>
     </div>
   </div>
-</div>
-</div>
 </div>
 </div>
 

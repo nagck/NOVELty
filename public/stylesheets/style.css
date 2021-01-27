@@ -62,7 +62,7 @@ body {
   /* font: 52px bold Helvetica, Arial; */
   /* margin: 5px */
 }
-.secondary-logo > span:first-child {
+.secondary-logo > span:nth-child(2) {
   color: #a08804;
 }
 
@@ -100,30 +100,6 @@ body {
   font-weight: bold;
   margin: 1rem;
 }
-/* ======= */
-/* form.login, form.signup {
-  top: 0;
-  position: relative;
-  transition: all;
-  box-shadow: 0px 10px 40px black;
-  border-radius: 3px;
-  background-color: #c8a115;
-  animation: fade-in 0.5s linear;
-}
-
-form {
-  min-width: 250px;
-}
-
-.fixed-ratio-resize {
-  max-width: 65%;
-  height: auto;
-  width: auto;
-  opacity: 80%;
-} */
-/* * {
-  border: 1px solid green;
-} */
 
 html {
   height: 100%;
@@ -136,11 +112,18 @@ html {
   overflow-x: hidden;
   background-image: url("../images/critics-list1.png");
   background-size: cover;
-
 }
 
 h5.text-center {
   font-size: 1.75rem;
+}
+
+.secondary-logo .ty   {
+  color: #a08804;
+}
+
+.tag {
+  z-index: -100;
 }
 
 .jumbotron {
@@ -180,7 +163,7 @@ h5.text-center {
 
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border-top: 16px solid #D55A5B; /* Blue */
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -304,7 +287,8 @@ li img {
 }
 
 #demo {
-  padding-top: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
 }
 
 .center-slide .lslide {
@@ -312,7 +296,7 @@ li img {
   text-align: center;
 }
 
-#book-cover.img{
+#book-cover img{
   height: 250px;
   width: 200px;
 }
@@ -325,4 +309,22 @@ li img {
   
   height: 250px;
   width: 200px;
+} 
+
+.carousel-indicators {
+  position: absolute;
+  bottom: -0px;
+  }
+
+#carousel-image {
+  float:right
+}
+
+@media only screen and (max-width: 512px) {
+  #carousel-image {
+   float:none;
+  }
+  #demo {
+    padding-left: 2em;
+   }
 }
