@@ -314,6 +314,7 @@ $(document).ready(function () {
           let img = $("<img>").attr("src", data[0].URL);
           img.attr("data-isbn", data[0].ISBN);
           img.attr("alt", data[0].name);
+          img.attr("class", "pointer");
           let li = $("<li>");
           li.attr("data-id", data[0].ISBN);
           li.addClass("center-slide");
