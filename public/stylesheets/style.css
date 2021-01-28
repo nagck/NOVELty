@@ -118,7 +118,13 @@ h5.text-center {
   font-size: 1.75rem;
 }
 
-.secondary-logo .ty   {
+.secondary-logo {
+  color: black;
+  /* font: 52px bold Helvetica, Arial; */
+  /* margin: 5px */
+}
+
+.ty   {
   color: #a08804;
 }
 

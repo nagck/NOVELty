@@ -21,7 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [6, 20],
+        len: {
+          args: [6,20],
+          msg: 'Password must be 6-20 characters!'
+        },
       },
     },
     // Email validation - cannot be null, and must be a proper email address
@@ -29,9 +32,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      validate: {
-        isEmail: true
-      }
+      validate:{
+        isEmail: {
+          args: true,
+          msg: 'Must be a valid e-mail!'
+        },
+        isUnique(value) {
+          return Users.findOne({where:{email:value}})
+            .then((email) => {
+              if (email) {
+                throw new Error('Email already taken!');
+              }
+            })
+        }
+      }        
     },
   });
 
