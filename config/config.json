@@ -1,13 +1,8 @@
 {
   "development": {
     "username": "root",
-<<<<<<< HEAD
     "password": "#3Ck1t0ur561",
     "database": "novelty",
-=======
-    "password": "f0rcheTTes*",
-    "database": "book_demo2",
->>>>>>> 261a84224e73a8f5af9e8e6ee25a046a1119811a
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
