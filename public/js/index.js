@@ -84,7 +84,6 @@ $(document).ready(function () {
     resetLink();
     $("#recommended-link").addClass('active')
     $("#recommended-div").removeClass('hide')
-    globals.recommendation.refresh();
   })
 
   // function to will reset the navigation
@@ -234,7 +233,7 @@ $(document).ready(function () {
           body: JSON.stringify(reviewObj)
         })
           .then(response => response.json())
-          .then(data => console.log(data))
+          .then(data => console.log("review entered"))
 
       })
   });
