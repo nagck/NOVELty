@@ -84,7 +84,7 @@ module.exports = function(app) {
 
   app.get('*', (req,res)=>{
     if (req.user) {
-      res.redirect("/");
+      res.redirect("/index");
     }
   });
 

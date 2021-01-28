@@ -141,6 +141,7 @@ module.exports = function(app) {
 
     // login - would need to configure passport
     app.post("/api/login", passport.authenticate("local"), (req, res) => {
+        console.log(req.user)
         res.json(req.user);
     });
 
