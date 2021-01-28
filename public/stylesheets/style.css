@@ -34,20 +34,6 @@ body {
   background-image: url("../images/critics_list1.png");
   background-size: cover;
 }
-
-/* .bg-image::after {
-  content: "";
-  background-image: url("../images/critics-list.jpg");  background-size: cover;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  opacity: 0.3;
-  z-index: -1;
-  /* background-size: cover; */
-} */
-
 .logo {
   position: relative;
   min-width: 200px;
@@ -129,7 +115,7 @@ html {
   /* font: 52px bold Helvetica, Arial; */
   /* margin: 5px */
 }
-.ty   {
+.secondary-logo .ty   {
   color: #a08804;
 }
 
@@ -367,7 +353,7 @@ li img {
   float:right
 }
 
-@media only screen and (max-width: 580px) {
+@media only screen and (max-width: 512px) {
   #carousel-image {
    float:none;
   }
@@ -375,3 +361,16 @@ li img {
     padding-left: 2em;
    }
 }
+
+
+.welcome {
+  text-shadow:
+   -1px -1px 2px #d8d8d8,  
+  1px -1px 2px #d8d8d8,
+  -1px 1px 2px #d8d8d8,
+  1px 1px 2px #d8d8d8 !important;
+}
+
+/* .welcome {
+  text-shadow: white 0 0 5px;
+} */
