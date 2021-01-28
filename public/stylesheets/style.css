@@ -10,6 +10,10 @@
 
 }
 
+/* * {
+  border: 1px solid green;
+} */
+
 form.login, form.signup {
   top: 0;
   position: relative;
@@ -121,6 +125,8 @@ html {
 
 .tag {
   z-index: -100;
+  display: flex;
+  justify-self:baseline !important;
 }
 
 .btn-primary:hover {
@@ -170,7 +176,6 @@ html {
 }
 
 .header-block {
-  /* padding-top: 6rem; */
   padding-left: 1rem;
   font: bolder;
   font-family: Arial, Helvetica, sans-serif;
@@ -370,7 +375,3 @@ li img {
   -1px 1px 2px #d8d8d8,
   1px 1px 2px #d8d8d8 !important;
 }
-
-/* .welcome {
-  text-shadow: white 0 0 5px;
-} */
