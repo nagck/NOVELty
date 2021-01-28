@@ -21,7 +21,24 @@ $(document).ready(function () {
     speed: 600,
     addClass: "center-slide",
     enableDrag: false,
-    responsive: []
+    responsive: [
+      {
+        breakpoint:600,
+        settings: {
+            item:2,
+            slideMove:1,
+            slideMargin:6,
+          }
+      },
+      {
+        breakpoint:400,
+        settings: {
+            item:1,
+            slideMove:1,
+            slideMargin:6,
+          }
+      }
+    ]
   }
 
   // assign current and past book sliders
@@ -84,6 +101,12 @@ $(document).ready(function () {
     resetLink();
     $("#recommended-link").addClass('active')
     $("#recommended-div").removeClass('hide')
+    try{
+      globals.recommendation.refresh();
+    }
+    catch(err){
+      console.log(err)
+    }
   })
 
   // function to will reset the navigation
