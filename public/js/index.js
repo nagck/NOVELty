@@ -101,7 +101,12 @@ $(document).ready(function () {
     resetLink();
     $("#recommended-link").addClass('active')
     $("#recommended-div").removeClass('hide')
-    globals.recommendation.refresh();
+    try{
+      globals.recommendation.refresh();
+    }
+    catch(err){
+      console.log(err)
+    }
   })
 
   // function to will reset the navigation
