@@ -63,7 +63,7 @@ const getRecommendation = (cb) =>{
         .then(results =>{
             let existingBooks = results.map(book => book.Book.ISBN);
             let finalISBN = uniqueISBN.filter(el => existingBooks.indexOf(el) === -1);
-            console.log(finalISBN.length)
+            // console.log(finalISBN.length)
             cb(shuffle(finalISBN).slice(0,Math.min(finalISBN.length,10)))        
         })
 

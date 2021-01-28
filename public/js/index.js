@@ -84,7 +84,6 @@ $(document).ready(function () {
     resetLink();
     $("#recommended-link").addClass('active')
     $("#recommended-div").removeClass('hide')
-    globals.recommendation.refresh();
   })
 
   // function to will reset the navigation
@@ -173,6 +172,7 @@ $(document).ready(function () {
     // get the information necessary
     let finished = $("input[type='radio'][name='done']:checked").val();
     let rating = parseInt($("input[type='radio'][name='rating']:checked").val());
+    if(isNaN(rating)) rating = 0;
     let content = $("textarea").val();
     let isbn = $("#modal-rating").attr("data-isbn");
 
@@ -234,7 +234,7 @@ $(document).ready(function () {
           body: JSON.stringify(reviewObj)
         })
           .then(response => response.json())
-          .then(data => console.log(data))
+          .then(data => console.log("review entered"))
 
       })
   });
@@ -314,6 +314,7 @@ $(document).ready(function () {
           let img = $("<img>").attr("src", data[0].URL);
           img.attr("data-isbn", data[0].ISBN);
           img.attr("alt", data[0].name);
+          img.attr("class", "pointer");
           let li = $("<li>");
           li.attr("data-id", data[0].ISBN);
           li.addClass("center-slide");
