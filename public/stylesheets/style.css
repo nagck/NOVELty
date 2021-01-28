@@ -129,7 +129,7 @@ html {
   /* font: 52px bold Helvetica, Arial; */
   /* margin: 5px */
 }
-.secondary-logo .ty   {
+.ty   {
   color: #a08804;
 }
 
@@ -367,7 +367,7 @@ li img {
   float:right
 }
 
-@media only screen and (max-width: 512px) {
+@media only screen and (max-width: 580px) {
   #carousel-image {
    float:none;
   }
