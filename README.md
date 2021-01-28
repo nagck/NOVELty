@@ -3,7 +3,7 @@ Have you ever read a book and thought to yourself: “I need to share this book 
 <br><br>
 YOU HAVE COME TO THE RIGHT PLACE!!.
 <br><br>
-NOVELty is one-stop shop for keeping track of all the books you are reading/read, get personalized book recommendations and participate in your book reading community by sharing the book that you like and partcipate in book reviews. 
+NOVELty is one-stop shop for keeping track of all the books you are reading/read, get personalized book recommendations and participate in your book reading community by sharing the book that you like and participate in book reviews. 
 
 ## Description
 NOVELty is a full-stack application devloped using Node, Express, JavaScript, MySQL, Sequelize, Handlebars, Bootstrap, HTML, CSS, Passport, ORM and several APIs.
@@ -73,6 +73,9 @@ Point your browser to http://localhost:8080/ to start using the application.
 ![image](assets/screenshot1.png)
 
 ![image](assets/screenshot2.png)
+
+## Link to walkthrough video demonstrating the functionality of the application:
+https://drive.google.com/file/d/1pZ_C9m36ZAjkKq378mMz5orE7E7Pj_Mq/view?usp=sharing
 
 ## Technologies Used: 
 * Node.js, Express, Passport
