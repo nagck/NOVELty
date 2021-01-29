@@ -324,6 +324,12 @@ $(document).ready(function () {
     modal.attr('data-search', type)
   })
 
+  $('#modal-search').on('hidden.bs.modal', function (event) {
+    titleInput.val("");
+    authorInput.val("")
+    resultsList.empty();
+  })
+
   // When the user clicks on a search result
   resultsList.click((e) => {
     e.preventDefault();
@@ -352,9 +358,6 @@ $(document).ready(function () {
             globals.past.refresh();
           }
         }
-        titleInput.val("");
-        authorInput.val("")
-        resultsList.empty();
         $("#modal-search").modal('hide');
       })
     }
