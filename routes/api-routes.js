@@ -445,12 +445,12 @@ module.exports = function(app) {
                 else{
                     let data = JSON.parse(body);
                     let bookList =[];
-                    let authorUnique = [];
+                    let titleUnique = [];
+                    // let authorUnique = [];
                     data.docs.forEach(book => {
                         if(book.author_name !== undefined) {
                             if(book.cover_edition_key !== undefined) {
-                                if(book.title.toLowerCase() == title.toLowerCase()){
-                                    if(authorUnique.indexOf(book.author_name[0].toLowerCase().trim())==-1) {
+                                    if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
                                         let isbn = book.cover_edition_key;
                                         bookList.push({
                                             author: book.author_name,
@@ -458,9 +458,7 @@ module.exports = function(app) {
                                             isbn: isbn
                                         });
                                     }
-                                    authorUnique.push(book.author_name[0].toLowerCase().trim());
-                                    
-                                }
+                                    titleUnique.push(book.title.toLowerCase().trim());
                             } 
                         }
                     })
@@ -492,22 +490,20 @@ module.exports = function(app) {
                     let bookList =[];
                     let titleUnique = [];
                     data.docs.forEach(book => {
-                        if(book.author_name !== undefined) {
-                            if(book.cover_edition_key !== undefined) {
-                                if(book.author_name[0].toLowerCase() == author.toLowerCase()){
-                                    if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
-                                        let isbn = book.cover_edition_key;
-                                        bookList.push({
-                                            author: book.author_name,
-                                            title: book.title,
-                                            isbn: isbn
-                                        });
-                                    }
-                                    titleUnique.push(book.title.toLowerCase().trim());
-                                }
-                            } 
-                        }
-                    })
+                      if(book.author_name !== undefined) {
+                          if(book.cover_edition_key !== undefined) {
+                                  if(titleUnique.indexOf(book.title.toLowerCase().trim())==-1) {
+                                      let isbn = book.cover_edition_key;
+                                      bookList.push({
+                                          author: book.author_name,
+                                          title: book.title,
+                                          isbn: isbn
+                                      });
+                                  }
+                                  titleUnique.push(book.title.toLowerCase().trim());
+                          } 
+                      }
+                  })
                     let final = bookList.slice(0,Math.min(10, bookList.length));
                     res.json(final)   
                 }  
