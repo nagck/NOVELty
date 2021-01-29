@@ -41,17 +41,20 @@ const shuffle =  (array) => {
 const getRecommendation = (cb) =>{
     
     // wait for all the recommendation api calls
-    Promise.all([
+    Promise.allSettled([
         fetch(`/api/recommendationUser/`),
         fetch(`/api/recommendationTD/`), 
         fetch(`/api/recommendationNY/hardcover-fiction`),
         
     ]).then(function (responses) {
-        return Promise.all(responses.map(function (response) {
-            return response.json();
-        }));
+        // console.log(responses);
+        let fulfilledResponse = responses.filter(response => response.status === "fulfilled");
+        return Promise.all(fulfilledResponse.map(function (response) {
+              return response.value.json();
+            }))
     }).then(function (data) {
         let allISBN = [];
+        // console.log(data)
         for(let i = 0; i < data.length; i++){
             data[i].forEach(el => allISBN.push(el));
         }
