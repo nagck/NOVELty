@@ -55,15 +55,16 @@ const findISNB = (titles,isbnArray, cb) =>{
     else{
         let title = titles.splice(0,1)[0];
         let url = "http://openlibrary.org/search.json?title=";
-            fetch(url+title)
+            fetch(encodeURI(url+title))
             .then(response => response.json())
             .then(data => {
                 let books = data.docs;
                 for(let i = 0; i < books.length; i++){
                     let book = books[i];
                     if(book.author_name !== undefined) {
-                      if(book.cover_edition_key !== null){
+                      if(book.cover_edition_key !== undefined){
                         // let works = book.key;
+                        
                         isbnArray.push(book.cover_edition_key)
                         break;
                       }
@@ -123,6 +124,10 @@ const getBookInfoGoogle = (ISBN, title, cb) => {
             }            
         } 
         cb(bookObj)
+    })
+    .catch(err =>{
+      console.log(err)
+      cb({})
     })
 }
 
@@ -520,7 +525,6 @@ module.exports = function(app) {
         fetch(url)
         .then(response => response.json())
         .then(data =>{
-            console.log(data)
             let key = `OLID:${ISBN}`;
             let book = data[key].details;
             let bookObj = {};
@@ -549,7 +553,6 @@ module.exports = function(app) {
                 getBookInfoGoogle(isbn,book.title, result =>{
                     if(Object.keys(result).length !== 0) {
                         bookObj = {... result, reviews: review};
-                        console.log(bookObj)
                     }
                     else{
                         bookObj["author"] = (book.authors) ? book.authors.map(author => author.name) : "None available";
@@ -559,7 +562,6 @@ module.exports = function(app) {
                         bookObj["title"] = book.title;
                         bookObj["description"] = description;
                         bookObj["reviews"] = review;
-                        console.log(bookObj)
                     }
                     res.json(bookObj);
                 })

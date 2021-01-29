@@ -49,6 +49,7 @@ const getRecommendation = (cb) =>{
     ]).then(function (responses) {
         // console.log(responses);
         let fulfilledResponse = responses.filter(response => response.status === "fulfilled");
+        // console.log(fulfilledResponse)
         return Promise.all(fulfilledResponse.map(function (response) {
               return response.value.json();
             }))
