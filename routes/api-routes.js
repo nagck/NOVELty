@@ -16,7 +16,7 @@ const recommendationTasteDiveArray = (titles, cb) =>{
         cb(false);
     }
     else{
-        const url = `https://tastedive.com/api/similar?q=book:${book}&k=${apikey}&limit=5`;
+        const url = `https://tastedive.com/api/similar?q=book:${book}&k=${apikey}&limit=10`;
         request(
             { 
                 url: url 
