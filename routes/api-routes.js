@@ -62,9 +62,11 @@ const findISNB = (titles,isbnArray, cb) =>{
                 for(let i = 0; i < books.length; i++){
                     let book = books[i];
                     if(book.author_name !== undefined) {
+                      if(book.cover_edition_key !== null){
                         // let works = book.key;
                         isbnArray.push(book.cover_edition_key)
                         break;
+                      }
                     }
                 }
                 findISNB(titles,isbnArray, cb);            
