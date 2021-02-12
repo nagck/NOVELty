@@ -26,8 +26,12 @@
     "sequelize": "^5.8.6"
   },
   "devDependencies": {
+    "fetch-mock": "^9.11.0",
     "jest": "^26.6.3",
     "jest-fetch-mock": "^3.0.3",
+    "jquery": "^3.5.1",
+    "mocha-sinon": "^2.1.2",
     "nodemon": "^2.0.7"
   }
 }
+  
